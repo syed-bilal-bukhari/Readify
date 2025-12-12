@@ -1,0 +1,153 @@
+#root {
+  min-height: 100vh;
+}
+
+.page {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.page h1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  color: #0f172a;
+}
+
+.page p {
+  margin: 0 0 1rem 0;
+  color: #334155;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin: 0;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.9rem;
+  padding: 1.25rem;
+  background: #f8fafc;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.card p {
+  margin: 0 0 0.75rem 0;
+  color: #475569;
+}
+
+.text-link {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.home-split {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.home-viewer {
+  flex: 7;
+  min-width: 0;
+}
+
+.home-sidebar {
+  flex: 3;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pdf-card {
+  max-width: 760px;
+}
+
+.pdf-space {
+  width: 100%;
+}
+
+.pdf-container {
+  position: relative;
+  width: 100%;
+}
+
+.pdf-page-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.selection-menu {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  z-index: 5;
+}
+
+.selection-menu .ant-btn {
+  box-shadow: none;
+}
+
+.pdf-highlight {
+  position: absolute;
+  background: rgba(252, 211, 77, 0.45);
+  border-radius: 4px;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.6);
+  z-index: 20;
+}
+
+.pdf-highlight-draft {
+  background: rgba(252, 211, 77, 0.25);
+  box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.6);
+  border-radius: 4px;
+}
+
+.pdf-container canvas {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+@media (max-width: 960px) {
+  .home-split {
+    flex-direction: column;
+  }
+  .home-sidebar {
+    width: 100%;
+    min-width: 0;
+  }
+}

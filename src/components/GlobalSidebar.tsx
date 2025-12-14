@@ -35,7 +35,7 @@ function GlobalSidebar() {
         items={[
           {
             key: "pdfs",
-            label: "PDF Library",
+            label: "Recent PDFs",
             children: <PdfListSidebar />,
           },
           {

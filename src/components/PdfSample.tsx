@@ -358,10 +358,6 @@ function PdfSample({
   return (
     <Card title={docTitle} className="pdf-card">
       <Space direction="vertical" size="middle" className="pdf-space">
-        <Typography.Text type="secondary">
-          Rendered with react-pdf (pdf.js). Use the Open PDF button to pick one
-          from disk or import an index.
-        </Typography.Text>
         {loadError ? (
           <Typography.Text type="danger">
             Failed to load PDF. Make sure the file exists under /public and

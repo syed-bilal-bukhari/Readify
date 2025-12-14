@@ -1,0 +1,243 @@
+/* Container: The main brown "widget" background */
+.pdf-carousel-card {
+  background: linear-gradient(135deg, #e6d0b3 0%, #d1b496 100%);
+  border-radius: 24px;
+  padding: 24px 0 20px;
+  box-shadow: 0 20px 40px rgba(101, 80, 60, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.pdf-carousel-loading {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* --- Carousel Structure --- */
+.pdf-carousel-shell {
+  position: relative;
+}
+
+/* Slick Specific Overrides */
+.pdf-carousel .slick-list {
+  padding-top: 20px !important;
+  padding-bottom: 40px !important;
+  overflow: visible; /* Essential to see the neighbors */
+}
+
+.pdf-carousel .slick-track {
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure individual slides are centered in their "slot" */
+.pdf-carousel .slick-slide {
+  display: flex;
+  justify-content: center;
+  outline: none;
+}
+
+/* --- The Slide (Card) Styles --- */
+.pdf-slide {
+  position: relative;
+  height: 200px; /* Slightly shorter to fit nicely */
+  width: 90%; /* Take up most of the 'center' slot width */
+  max-width: 240px; /* Cap width so it doesn't get huge */
+
+  border-radius: 20px;
+  padding: 16px;
+
+  /* Glassmorphism Card Style */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.08);
+
+  /* Text Colors */
+  color: #4b3b2a;
+}
+
+/* --- 3D / Coverflow States --- */
+
+/* 1. Active (Center) Card */
+.pdf-slide.is-active {
+  transform: scale(1.1); /* Pop out more */
+  opacity: 1;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 24px 48px rgba(90, 70, 50, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* 2. Adjacent (Side) Cards & Distant Cards */
+/* We treat everything not active as "dimmed" */
+.pdf-slide.is-adjacent,
+.pdf-slide.is-distant {
+  transform: scale(0.85); /* Shrink neighbors */
+  opacity: 0.5;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.4);
+  filter: blur(0px); /* Optional: add blur(1px) if you want deeper depth */
+}
+
+/* Hover Effect on Active Card */
+.pdf-slide.is-active:hover {
+  transform: scale(1.12);
+}
+
+/* Hover Effect on Inactive Cards */
+.pdf-slide:not(.is-active):hover {
+  opacity: 0.8;
+  transform: scale(0.88);
+}
+
+/* --- Card Internal Content --- */
+
+.pdf-slide-preview {
+  flex: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pdf-slide-preview-icon {
+  font-size: 42px;
+  color: #d1b496;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.pdf-slide-preview .react-pdf__Document {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-slide-preview canvas {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pdf-slide-content {
+  text-align: center; /* Centered text looks better in this layout */
+}
+
+.pdf-slide-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3d2e1e;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.pdf-slide-path {
+  display: block;
+  font-size: 11px;
+  color: #7d6b5a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}
+
+.pdf-slide-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #d1b496;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Navigation Arrows --- */
+.pdf-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #4b3b2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-carousel-arrow:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow-left {
+  left: 12px;
+}
+.arrow-right {
+  right: 12px;
+}
+
+/* --- Pagination Dots --- */
+.pdf-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -10px;
+  position: relative;
+  z-index: 20;
+  padding-bottom: 12px;
+}
+
+.pdf-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(75, 59, 42, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pdf-dot.active {
+  background: #4b3b2a;
+  width: 24px;
+  border-radius: 12px;
+}

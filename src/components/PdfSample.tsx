@@ -3,12 +3,8 @@ import {
   Card,
   Flex,
   Form,
-  Input,
   InputNumber,
-  Modal,
-  Select,
   Space,
-  Tag,
   Typography,
   message,
 } from "antd";
@@ -17,9 +13,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import type { Highlight } from "../types/pdfHighlight";
 import { addHighlightRecord, getHighlightsByPdf } from "../utils/db/highlights";
 import { getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
+import HighlightDetailsModal from "./HighlightDetailsModal";
+import HighlightMetadataModal from "./HighlightMetadataModal";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -30,23 +29,6 @@ type PdfSampleProps = {
   focusHighlightId?: string | null;
   initialPage?: number;
   onPageChange?: (page: number) => void;
-};
-
-type Highlight = {
-  id: string;
-  page: number;
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-  topicIds: string[];
-  book?: string;
-  volume?: string;
-  chapter?: string;
-  tags?: string[];
-  description?: string;
-  pdfId?: string;
-  createdAt?: number;
 };
 
 function PdfSample({
@@ -462,128 +444,25 @@ function PdfSample({
           )}
         </Flex>
       </Space>
-      <Modal
-        title="Save Highlight Metadata"
+      <HighlightMetadataModal
         open={metadataModalOpen}
         onOk={handleSaveMetadata}
         onCancel={handleCancelMetadata}
-        okText="Save"
-        cancelText="Cancel"
-        destroyOnClose
-      >
-        <Form
-          form={metaForm}
-          layout="vertical"
-          initialValues={{
-            page: currentPage,
-            tags: "",
-            topicIds: [],
-          }}
-        >
-          <Form.Item name="topicIds" label="Topics">
-            <Select
-              mode="multiple"
-              placeholder="Select topics"
-              options={topics.map((topic) => ({
-                value: topic.id,
-                label: topic.name,
-              }))}
-              allowClear
-              showSearch
-              optionFilterProp="label"
-            />
-          </Form.Item>
-          <Form.Item name="book" label="Book">
-            <Input placeholder="Book name" />
-          </Form.Item>
-          <Form.Item name="volume" label="Volume">
-            <Input placeholder="Volume" />
-          </Form.Item>
-          <Form.Item name="chapter" label="Chapter">
-            <Input placeholder="Chapter" />
-          </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea
-              placeholder="Optional description for this highlight"
-              rows={3}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            name="page"
-            label="Page number"
-            rules={[{ required: true, message: "Page is required" }]}
-          >
-            <InputNumber min={1} style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item name="tags" label="Tags (comma separated)">
-            <Input placeholder="tag1, tag2" />
-          </Form.Item>
-          <Form.Item label="PDF id">
-            <Input value={source?.id ?? ""} disabled />
-          </Form.Item>
-        </Form>
-      </Modal>
+        form={metaForm}
+        currentPage={currentPage}
+        topics={topics}
+        pdfId={source?.id}
+      />
 
-      <Modal
-        title="Highlight Details"
+      <HighlightDetailsModal
         open={viewModalOpen}
-        onCancel={() => {
+        onClose={() => {
           setViewModalOpen(false);
           setSelectedHighlight(null);
         }}
-        footer={null}
-      >
-        {selectedHighlight ? (
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <Typography.Text>Page: {selectedHighlight.page}</Typography.Text>
-            {selectedHighlight.book ? (
-              <Typography.Text>Book: {selectedHighlight.book}</Typography.Text>
-            ) : null}
-            {selectedHighlight.volume ? (
-              <Typography.Text>
-                Volume: {selectedHighlight.volume}
-              </Typography.Text>
-            ) : null}
-            {selectedHighlight.chapter ? (
-              <Typography.Text>
-                Chapter: {selectedHighlight.chapter}
-              </Typography.Text>
-            ) : null}
-            {selectedHighlight.tags?.length ? (
-              <Space wrap>
-                {selectedHighlight.tags.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </Space>
-            ) : (
-              <Typography.Text type="secondary">No tags</Typography.Text>
-            )}
-            {selectedHighlight.topicIds?.length ? (
-              <Space direction="vertical" size={4} style={{ width: "100%" }}>
-                <Typography.Text strong>Topics</Typography.Text>
-                <Space wrap>
-                  {selectedHighlight.topicIds.map((id) => (
-                    <Tag key={id}>{topicNameMap.get(id) ?? id}</Tag>
-                  ))}
-                </Space>
-              </Space>
-            ) : (
-              <Typography.Text type="secondary">No topics</Typography.Text>
-            )}
-            {selectedHighlight.createdAt ? (
-              <Typography.Text type="secondary">
-                Created:{" "}
-                {new Date(selectedHighlight.createdAt).toLocaleString()}
-              </Typography.Text>
-            ) : null}
-          </Space>
-        ) : (
-          <Typography.Text type="secondary">
-            No highlight selected
-          </Typography.Text>
-        )}
-      </Modal>
+        highlight={selectedHighlight}
+        topicNameMap={topicNameMap}
+      />
     </Card>
   );
 }

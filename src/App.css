@@ -158,6 +158,24 @@
   padding: 8px;
 }
 
+/* Increase topic search select height to fit multi-line labels */
+.topic-search-select .ant-select-selector {
+  min-height: 64px;
+  padding: 10px 14px;
+  align-items: center;
+}
+
+.topic-search-select .ant-select-selection-item,
+.topic-search-select .ant-select-selection-placeholder {
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+}
+
+.topic-search-select {
+  margin-bottom: 16px;
+}
+
 .topic-node .ant-typography {
   display: block;
   margin-bottom: 4px;

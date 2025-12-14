@@ -1,7 +1,8 @@
 import { Alert, Card, List, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useApp } from "../context/AppContext";
-import { getPdfIndex, type PdfRecord } from "../utils/pdfIndex";
+import { getPdfIndex } from "../utils/db/pdfs";
+import type { PdfRecord } from "../utils/db/types";
 
 function PdfListSidebar() {
   const { setSelectedPdfById } = useApp();

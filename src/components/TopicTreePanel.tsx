@@ -24,12 +24,12 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import {
   addTopic,
-  buildTopicGraph,
   getTopics,
   moveTopic,
   renameTopic,
-  type TopicRecord,
-} from "../utils/pdfIndex";
+} from "../utils/db/topics";
+import type { TopicRecord } from "../utils/db/types";
+import { buildTopicGraph } from "../utils/topics/graph";
 
 type TopicNodeData = {
   topic: TopicRecord;

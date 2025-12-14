@@ -17,12 +17,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import {
-  addHighlightRecord,
-  getHighlightsByPdf,
-  getTopics,
-  type TopicRecord,
-} from "../utils/pdfIndex";
+import { addHighlightRecord, getHighlightsByPdf } from "../utils/db/highlights";
+import { getTopics } from "../utils/db/topics";
+import type { TopicRecord } from "../utils/db/types";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -32,6 +29,7 @@ type PdfSampleProps = {
   source?: PdfSource;
   focusHighlightId?: string | null;
   initialPage?: number;
+  onPageChange?: (page: number) => void;
 };
 
 type Highlight = {
@@ -46,11 +44,17 @@ type Highlight = {
   volume?: string;
   chapter?: string;
   tags?: string[];
+  description?: string;
   pdfId?: string;
   createdAt?: number;
 };
 
-function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
+function PdfSample({
+  source,
+  focusHighlightId,
+  initialPage,
+  onPageChange,
+}: PdfSampleProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [highlights, setHighlights] = useState<Highlight[]>([]);
@@ -64,11 +68,11 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
   const [metaForm] = Form.useForm();
   const [metadataModalOpen, setMetadataModalOpen] = useState(false);
   const [topics, setTopics] = useState<TopicRecord[]>([]);
-  const [flashHighlightId, setFlashHighlightId] = useState<string | null>(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<Highlight | null>(
     null
   );
+  const hasNotifiedInitialPageRef = useRef(false);
 
   const topicNameMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -76,10 +80,14 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
     return map;
   }, [topics]);
 
-  const totalPages = numPages ?? 0;
+  const totalPages = numPages ?? Number.POSITIVE_INFINITY;
+  const totalPagesDisplay = numPages ?? 0;
 
   const clampPage = (page: number) => {
-    if (!numPages) return 1;
+    if (!numPages) {
+      // If page count not known yet, optimistically keep requested page
+      return Math.max(1, page);
+    }
     return Math.min(Math.max(1, page), numPages);
   };
 
@@ -89,7 +97,41 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
     setCurrentPage(initialPage ?? 1);
     setHighlights([]);
     setLoadError(null);
-  }, [source?.url, initialPage]);
+  }, [source?.url]);
+
+  useEffect(() => {
+    if (initialPage !== undefined && initialPage !== null) {
+      setCurrentPage(initialPage);
+    }
+  }, [initialPage]);
+
+  useEffect(() => {
+    // skip the first notification if an initialPage was provided,
+    // to avoid emitting the default 1 before the prop syncs through.
+    if (!hasNotifiedInitialPageRef.current) {
+      hasNotifiedInitialPageRef.current = true;
+      if (initialPage !== undefined && initialPage !== null) {
+        return;
+      }
+    }
+    if (onPageChange) {
+      onPageChange(currentPage);
+    }
+    // eslint-disable-next-line no-console
+    console.log("PdfSample page state", {
+      currentPage,
+      numPages,
+      focusHighlightId,
+      sourceId: source?.id,
+    });
+  }, [
+    currentPage,
+    numPages,
+    focusHighlightId,
+    source?.id,
+    onPageChange,
+    initialPage,
+  ]);
 
   useEffect(() => {
     if (numPages) {
@@ -124,6 +166,7 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
                 tags,
                 pdfId,
                 createdAt,
+                description,
               }) => ({
                 id,
                 page,
@@ -138,6 +181,7 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
                 tags,
                 pdfId,
                 createdAt,
+                description,
               })
             )
           );
@@ -152,32 +196,7 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
     };
   }, [source?.id]);
 
-  useEffect(() => {
-    if (!focusHighlightId) return;
-    const target = highlights.find((h) => h.id === focusHighlightId);
-    if (target && target.page !== currentPage) {
-      setCurrentPage(target.page);
-    }
-  }, [focusHighlightId, highlights, currentPage]);
-
-  useEffect(() => {
-    if (!focusHighlightId) return;
-    const target = highlights.find(
-      (h) => h.id === focusHighlightId && h.page === currentPage
-    );
-    if (!target) return;
-    const timeout = setTimeout(() => {
-      const el = pageRef.current?.querySelector(
-        `[data-highlight-id="${focusHighlightId}"]`
-      ) as HTMLElement | null;
-      if (el) {
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
-        setFlashHighlightId(focusHighlightId);
-        setTimeout(() => setFlashHighlightId(null), 1500);
-      }
-    }, 150);
-    return () => clearTimeout(timeout);
-  }, [focusHighlightId, highlights, currentPage]);
+  // focusHighlightId is retained for signature compatibility but no longer used
 
   useEffect(() => {
     const loadTopics = async () => {
@@ -297,6 +316,7 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
         volume: values.volume as string,
         chapter: values.chapter as string,
         tags,
+        description: (values.description as string) || undefined,
         createdAt: Date.now(),
       };
       setHighlights((prev) => [...prev, record]);
@@ -327,18 +347,19 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
         <Flex align="center" gap={8} wrap>
           <Button
             onClick={() => setCurrentPage((p) => clampPage(p - 1))}
-            disabled={!numPages || currentPage <= 1}
+            disabled={currentPage <= 1}
           >
             Previous
           </Button>
           <Button
             onClick={() => setCurrentPage((p) => clampPage(p + 1))}
-            disabled={!numPages || currentPage >= totalPages}
+            disabled={currentPage >= totalPages}
           >
             Next
           </Button>
           <Typography.Text>
-            Page {currentPage} {totalPages ? `of ${totalPages}` : ""}
+            Page {currentPage}{" "}
+            {totalPagesDisplay ? `of ${totalPagesDisplay}` : ""}
           </Typography.Text>
           <Button
             type={drawMode ? "primary" : "default"}
@@ -378,16 +399,11 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
                     data-highlight-id={hl.id}
                     data-highlight-page={hl.page}
                     data-highlight-pdf={source?.id ?? ""}
-                    data-flash={flashHighlightId === hl.id || undefined}
                     style={{
                       top: hl.top,
                       left: hl.left,
                       width: hl.width,
                       height: hl.height,
-                      boxShadow:
-                        flashHighlightId === hl.id
-                          ? "0 0 0 2px #2563eb, 0 0 12px rgba(37,99,235,0.6)"
-                          : undefined,
                     }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
@@ -414,6 +430,9 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
                 onLoadSuccess={({ numPages: total }) => {
                   setLoadError(null);
                   setNumPages(total);
+                  setCurrentPage((prev) =>
+                    Math.min(Math.max(1, prev), total ?? prev)
+                  );
                 }}
                 loading="Loading PDF..."
                 error="Failed to load the PDF."
@@ -483,6 +502,13 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
           <Form.Item name="chapter" label="Chapter">
             <Input placeholder="Chapter" />
           </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea
+              placeholder="Optional description for this highlight"
+              rows={3}
+              allowClear
+            />
+          </Form.Item>
           <Form.Item
             name="page"
             label="Page number"
@@ -534,12 +560,17 @@ function PdfSample({ source, focusHighlightId, initialPage }: PdfSampleProps) {
               <Typography.Text type="secondary">No tags</Typography.Text>
             )}
             {selectedHighlight.topicIds?.length ? (
-              <Space wrap>
-                {selectedHighlight.topicIds.map((id) => (
-                  <Tag key={id}>{topicNameMap.get(id) ?? id}</Tag>
-                ))}
+              <Space direction="vertical" size={4} style={{ width: "100%" }}>
+                <Typography.Text strong>Topics</Typography.Text>
+                <Space wrap>
+                  {selectedHighlight.topicIds.map((id) => (
+                    <Tag key={id}>{topicNameMap.get(id) ?? id}</Tag>
+                  ))}
+                </Space>
               </Space>
-            ) : null}
+            ) : (
+              <Typography.Text type="secondary">No topics</Typography.Text>
+            )}
             {selectedHighlight.createdAt ? (
               <Typography.Text type="secondary">
                 Created:{" "}

@@ -12,16 +12,15 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import {
-  buildTopicPath,
-  formatTopicPath,
-  getHighlightsByTopic,
-  getPdfRecord,
-  getTopics,
-  type HighlightRecord,
-  type PdfRecord,
-  type TopicRecord,
-} from "../utils/pdfIndex";
+import { getHighlightsByTopic } from "../utils/db/highlights";
+import { getPdfRecord } from "../utils/db/pdfs";
+import { getTopics } from "../utils/db/topics";
+import type {
+  HighlightRecord,
+  PdfRecord,
+  TopicRecord,
+} from "../utils/db/types";
+import { buildTopicPath, formatTopicPath } from "../utils/topics/graph";
 
 type ReferenceEntry = {
   highlight: HighlightRecord;
@@ -163,7 +162,9 @@ function SearchByTopicPanel({
         <Select
           showSearch
           allowClear
+          size="large"
           placeholder="Search topics"
+          className="topic-search-select"
           value={selectedTopicId ?? undefined}
           onSearch={(value) => setQuery(value)}
           onChange={(value) => {
@@ -171,7 +172,7 @@ function SearchByTopicPanel({
             onTopicSelect?.(value ?? null);
           }}
           filterOption={false}
-          style={{ width: "100%" }}
+          style={{ width: "100%", marginBottom: 8 }}
           options={(query ? results : []).map((item) => ({
             value: item.id,
             label: (
@@ -186,7 +187,12 @@ function SearchByTopicPanel({
           notFoundContent={query ? "No topics found" : null}
         />
 
-        <Typography.Text strong>References</Typography.Text>
+        <Typography.Text
+          strong
+          style={{ marginTop: 16, display: "inline-block" }}
+        >
+          References
+        </Typography.Text>
         {error ? <Alert type="error" message={error} /> : null}
         <List
           size="small"
@@ -215,7 +221,14 @@ function SearchByTopicPanel({
                 }
                 description={
                   <Space direction="vertical" size={4}>
+                    <Typography.Text strong>
+                      {entry.highlight.description?.trim() ||
+                        entry.pdf?.title ||
+                        entry.highlight.pdfId ||
+                        "Highlight"}
+                    </Typography.Text>
                     <span>
+                      {entry.pdf ? `${entry.pdf.title} · ` : ""}
                       Page {entry.highlight.page}
                       {entry.highlight.book ? ` · ${entry.highlight.book}` : ""}
                       {entry.highlight.volume

@@ -437,8 +437,6 @@ function PdfSample({
             minHeight: 400,
             overflow: "auto",
             padding: 16,
-            border: "1px solid #f0f0f0",
-            borderRadius: 8,
           }}
         >
           {hasFile && activeSource ? (

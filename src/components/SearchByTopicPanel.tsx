@@ -1,0 +1,243 @@
+import {
+  Alert,
+  Button,
+  Card,
+  List,
+  Select,
+  Space,
+  Tag,
+  Typography,
+  message,
+} from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
+import {
+  buildTopicPath,
+  formatTopicPath,
+  getHighlightsByTopic,
+  getPdfRecord,
+  getTopics,
+  type HighlightRecord,
+  type PdfRecord,
+  type TopicRecord,
+} from "../utils/pdfIndex";
+
+type ReferenceEntry = {
+  highlight: HighlightRecord;
+  pdf?: PdfRecord;
+};
+
+type SearchByTopicPanelProps = {
+  title?: string;
+  compact?: boolean;
+  onOpenReference?: (payload: {
+    pdfId: string;
+    highlightId: string;
+    page?: number;
+  }) => void;
+  onTopicSelect?: (topicId: string | null) => void;
+};
+
+function SearchByTopicPanel({
+  title = "Search by Topic",
+  compact = false,
+  onOpenReference,
+  onTopicSelect,
+}: SearchByTopicPanelProps) {
+  const navigate = useNavigate();
+  const { setSelectedPdfById } = useApp();
+  const [topics, setTopics] = useState<TopicRecord[]>([]);
+  const [query, setQuery] = useState("");
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  const [references, setReferences] = useState<ReferenceEntry[]>([]);
+  const [loadingRefs, setLoadingRefs] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const records = await getTopics();
+        setTopics(records);
+      } catch (err) {
+        const msg =
+          err instanceof Error ? err.message : "Failed to load topics";
+        message.error(msg);
+      }
+    };
+    void load();
+  }, []);
+
+  const pathLookup = useMemo(() => {
+    const entries: Record<string, string> = {};
+    topics.forEach((topic) => {
+      const path = buildTopicPath(topics, topic.id);
+      entries[topic.id] = formatTopicPath(path);
+    });
+    return entries;
+  }, [topics]);
+
+  const results = useMemo(() => {
+    if (!query.trim()) return [];
+    const q = query.toLowerCase();
+    return topics.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        pathLookup[t.id]?.toLowerCase().includes(q)
+    );
+  }, [query, topics, pathLookup]);
+
+  useEffect(() => {
+    const loadRefs = async () => {
+      if (!selectedTopicId) {
+        setReferences([]);
+        return;
+      }
+      setLoadingRefs(true);
+      setError(null);
+      try {
+        const refs = await getHighlightsByTopic(selectedTopicId);
+        const pdfIds = Array.from(new Set(refs.map((r) => r.pdfId))).filter(
+          Boolean
+        ) as string[];
+        const pdfMap = new Map<string, PdfRecord>();
+        for (const id of pdfIds) {
+          const pdf = await getPdfRecord(id);
+          if (pdf) pdfMap.set(id, pdf);
+        }
+        setReferences(
+          refs.map((highlight) => ({
+            highlight,
+            pdf: highlight.pdfId ? pdfMap.get(highlight.pdfId) : undefined,
+          }))
+        );
+      } catch (err) {
+        const msg =
+          err instanceof Error ? err.message : "Failed to load references";
+        setError(msg);
+      } finally {
+        setLoadingRefs(false);
+      }
+    };
+    void loadRefs();
+  }, [selectedTopicId]);
+
+  const handleOpenReference = async (entry: ReferenceEntry) => {
+    const pdfId = entry.highlight.pdfId;
+    if (!pdfId) {
+      message.error("Missing PDF id for this reference.");
+      return;
+    }
+    try {
+      await setSelectedPdfById(pdfId);
+      const payload = {
+        pdfId,
+        highlightId: entry.highlight.id,
+        page: entry.highlight.page,
+      };
+      if (onOpenReference) {
+        onOpenReference(payload);
+      } else {
+        navigate("/", {
+          state: {
+            focusHighlightId: payload.highlightId,
+            focusPage: payload.page,
+            focusPdfId: pdfId,
+          },
+        });
+      }
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Failed to open reference";
+      message.error(msg);
+    }
+  };
+
+  const selectedTopic = selectedTopicId
+    ? topics.find((t) => t.id === selectedTopicId) ?? null
+    : null;
+
+  return (
+    <Card title={title} size={compact ? "small" : "default"}>
+      <Space direction="vertical" style={{ width: "100%" }} size="small">
+        <Select
+          showSearch
+          allowClear
+          placeholder="Search topics"
+          value={selectedTopicId ?? undefined}
+          onSearch={(value) => setQuery(value)}
+          onChange={(value) => {
+            setSelectedTopicId(value ?? null);
+            onTopicSelect?.(value ?? null);
+          }}
+          filterOption={false}
+          style={{ width: "100%" }}
+          options={(query ? results : []).map((item) => ({
+            value: item.id,
+            label: (
+              <Space direction="vertical" size={0}>
+                <span>{item.name}</span>
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  {pathLookup[item.id]}
+                </Typography.Text>
+              </Space>
+            ),
+          }))}
+          notFoundContent={query ? "No topics found" : null}
+        />
+
+        <Typography.Text strong>References</Typography.Text>
+        {error ? <Alert type="error" message={error} /> : null}
+        <List
+          size="small"
+          loading={loadingRefs}
+          dataSource={references}
+          locale={{
+            emptyText: selectedTopic ? "No references" : "Select a topic",
+          }}
+          renderItem={(entry) => (
+            <List.Item
+              actions={[
+                <Button
+                  key="open"
+                  type="link"
+                  onClick={() => void handleOpenReference(entry)}
+                >
+                  Open Reference
+                </Button>,
+              ]}
+            >
+              <List.Item.Meta
+                title={
+                  entry.pdf
+                    ? `${entry.pdf.title}`
+                    : entry.highlight.pdfId ?? "PDF"
+                }
+                description={
+                  <Space direction="vertical" size={4}>
+                    <span>
+                      Page {entry.highlight.page}
+                      {entry.highlight.book ? ` · ${entry.highlight.book}` : ""}
+                      {entry.highlight.volume
+                        ? ` · Vol ${entry.highlight.volume}`
+                        : ""}
+                    </span>
+                    {entry.highlight.tags?.length ? (
+                      <Space wrap size={4}>
+                        {entry.highlight.tags.map((tag) => (
+                          <Tag key={tag}>{tag}</Tag>
+                        ))}
+                      </Space>
+                    ) : null}
+                  </Space>
+                }
+              />
+            </List.Item>
+          )}
+        />
+      </Space>
+    </Card>
+  );
+}
+
+export default SearchByTopicPanel;

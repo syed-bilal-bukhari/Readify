@@ -1,20 +1,30 @@
-import { Card, Typography } from "antd";
+import { Space, Typography } from "antd";
+import { useState } from "react";
+import SearchByTopicPanel from "../components/SearchByTopicPanel";
+import TopicTreePanel from "../components/TopicTreePanel";
 
 function TopicsPage() {
+  const [focusedTopicId, setFocusedTopicId] = useState<string | null>(null);
+
   return (
     <section className="page">
       <p className="eyebrow">Topics</p>
       <Typography.Title level={1}>Topic Tree</Typography.Title>
       <Typography.Paragraph>
-        Placeholder for the topic explorer. Visualize branches, and see
-        highlights that belong to multiple nodes to trace connections across
-        unrelated subjects.
+        Manage the full topic hierarchy. Add, rename, or move nodes and explore
+        the graph layout.
       </Typography.Paragraph>
-      <Card>
-        <Typography.Text type="secondary">
-          Coming soon: topic graph, tree navigation, and shared highlight view.
-        </Typography.Text>
-      </Card>
+      <Space direction="vertical" style={{ width: "100%" }} size="large">
+        <SearchByTopicPanel
+          title="Search by Topic"
+          onTopicSelect={(topicId) => setFocusedTopicId(topicId)}
+        />
+        <TopicTreePanel
+          flowHeight={600}
+          bordered={false}
+          focusTopicId={focusedTopicId ?? undefined}
+        />
+      </Space>
     </section>
   );
 }

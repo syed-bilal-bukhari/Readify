@@ -125,7 +125,7 @@
   position: absolute;
   background: rgba(252, 211, 77, 0.45);
   border-radius: 4px;
-  pointer-events: none;
+  pointer-events: auto;
   box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.6);
   z-index: 20;
 }
@@ -134,12 +134,41 @@
   background: rgba(252, 211, 77, 0.25);
   box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.6);
   border-radius: 4px;
+  pointer-events: none;
 }
 
 .pdf-container canvas {
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.topic-flow-card {
+  width: 100%;
+}
+
+.topic-flow-wrapper {
+  height: 420px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.topic-node .ant-card-body {
+  padding: 8px;
+}
+
+.topic-node .ant-typography {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.topic-node .react-flow__handle {
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 @media (max-width: 960px) {

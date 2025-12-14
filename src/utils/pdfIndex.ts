@@ -6,14 +6,6 @@ export type PdfRecord = {
   path: string;
 };
 
-const DB_NAME = "pdfIndexDb";
-const DB_VERSION = 2;
-const STORE_PDFS = "pdfs";
-const STORE_META = "meta";
-const STORE_HIGHLIGHTS = "highlights";
-const LAST_PDF_KEY = "lastPdfId";
-type PdfDb = IDBPDatabase<unknown>;
-
 export type HighlightRecord = {
   id: string;
   pdfId: string;
@@ -22,8 +14,40 @@ export type HighlightRecord = {
   left: number;
   width: number;
   height: number;
+  topicIds: string[];
+  book?: string;
+  volume?: string;
+  chapter?: string;
+  tags?: string[];
   createdAt: number;
 };
+
+export type TopicRecord = {
+  id: string;
+  name: string;
+  parentId: string | null;
+};
+
+export type TopicGraphNode = {
+  id: string;
+  name: string;
+  parentId: string | null;
+};
+
+export type TopicGraphEdge = {
+  id: string;
+  source: string;
+  target: string;
+};
+
+const DB_NAME = "pdfIndexDb";
+const DB_VERSION = 3;
+const STORE_PDFS = "pdfs";
+const STORE_META = "meta";
+const STORE_HIGHLIGHTS = "highlights";
+const STORE_TOPICS = "topics";
+const LAST_PDF_KEY = "lastPdfId";
+type PdfDb = IDBPDatabase<unknown>;
 
 async function getDb(): Promise<PdfDb> {
   return openDB(DB_NAME, DB_VERSION, {
@@ -37,6 +61,9 @@ async function getDb(): Promise<PdfDb> {
       if (!db.objectStoreNames.contains(STORE_HIGHLIGHTS)) {
         const store = db.createObjectStore(STORE_HIGHLIGHTS, { keyPath: "id" });
         store.createIndex("pdfId", "pdfId", { unique: false });
+      }
+      if (!db.objectStoreNames.contains(STORE_TOPICS)) {
+        db.createObjectStore(STORE_TOPICS, { keyPath: "id" });
       }
     },
   });
@@ -123,38 +150,87 @@ export async function clearHighlightsForPdf(pdfId: string): Promise<void> {
   await tx.done;
 }
 
+export async function getHighlightsByTopic(
+  topicId: string
+): Promise<HighlightRecord[]> {
+  const db = await getDb();
+  const all = (await db.getAll(STORE_HIGHLIGHTS)) as HighlightRecord[];
+  return all.filter((hl) => hl.topicIds?.includes(topicId));
+}
+
+export async function getTopics(): Promise<TopicRecord[]> {
+  const db = await getDb();
+  return (await db.getAll(STORE_TOPICS)) as TopicRecord[];
+}
+
+export async function addTopic(record: TopicRecord): Promise<void> {
+  const db = await getDb();
+  await db.put(STORE_TOPICS, record);
+}
+
+export async function renameTopic(id: string, name: string): Promise<void> {
+  const db = await getDb();
+  const existing = (await db.get(STORE_TOPICS, id)) as TopicRecord | undefined;
+  if (!existing) return;
+  await db.put(STORE_TOPICS, { ...existing, name });
+}
+
+export async function moveTopic(
+  id: string,
+  newParentId: string | null
+): Promise<void> {
+  const db = await getDb();
+  const existing = (await db.get(STORE_TOPICS, id)) as TopicRecord | undefined;
+  if (!existing) return;
+  const topics = (await db.getAll(STORE_TOPICS)) as TopicRecord[];
+  const isDescendant = (targetId: string | null, searchId: string): boolean => {
+    if (!targetId) return false;
+    if (targetId === searchId) return true;
+    const parent = topics.find((t) => t.id === targetId);
+    return parent ? isDescendant(parent.parentId, searchId) : false;
+  };
+  if (newParentId && isDescendant(newParentId, id)) {
+    throw new Error("Cannot move topic under its descendant");
+  }
+  await db.put(STORE_TOPICS, { ...existing, parentId: newParentId });
+}
+
 export type PdfIndexBackup = {
   pdfs: PdfRecord[];
   lastPdfId: string | null;
   highlights: HighlightRecord[];
+  topics: TopicRecord[];
 };
 
 export async function exportPdfIndex(): Promise<PdfIndexBackup> {
   const db = await getDb();
   await seedIfEmpty(db);
-  const pdfs = ((await db.getAll(STORE_PDFS)) as PdfRecord[]).map(
-    ({ blob, ...rest }) => rest
-  );
+  const pdfs = (await db.getAll(STORE_PDFS)) as PdfRecord[];
   const lastPdfId =
     ((await db.get(STORE_META, LAST_PDF_KEY)) as string | null) ?? null;
   const highlights =
     ((await db.getAll(STORE_HIGHLIGHTS)) as HighlightRecord[]) ?? [];
-  return { pdfs, lastPdfId, highlights };
+  const topics = ((await db.getAll(STORE_TOPICS)) as TopicRecord[]) ?? [];
+  return { pdfs, lastPdfId, highlights, topics };
 }
 
 export async function importPdfIndex(data: PdfIndexBackup): Promise<void> {
   const db = await getDb();
   const tx = db.transaction(
-    [STORE_PDFS, STORE_META, STORE_HIGHLIGHTS],
+    [STORE_PDFS, STORE_META, STORE_HIGHLIGHTS, STORE_TOPICS],
     "readwrite"
   );
   await tx.objectStore(STORE_PDFS).clear();
   await tx.objectStore(STORE_HIGHLIGHTS).clear();
+  await tx.objectStore(STORE_TOPICS).clear();
   for (const record of data.pdfs) {
     await tx.objectStore(STORE_PDFS).put(record);
   }
   for (const record of data.highlights ?? []) {
     await tx.objectStore(STORE_HIGHLIGHTS).put(record);
+  }
+  for (const record of data.topics ?? []) {
+    await tx.objectStore(STORE_TOPICS).put(record);
   }
   if (data.lastPdfId) {
     await tx.objectStore(STORE_META).put(data.lastPdfId, LAST_PDF_KEY);
@@ -162,4 +238,41 @@ export async function importPdfIndex(data: PdfIndexBackup): Promise<void> {
     await tx.objectStore(STORE_META).delete(LAST_PDF_KEY);
   }
   await tx.done;
+}
+
+export function buildTopicGraph(topics: TopicRecord[]): {
+  nodes: TopicGraphNode[];
+  edges: TopicGraphEdge[];
+} {
+  const nodes = topics.map(({ id, name, parentId }) => ({
+    id,
+    name,
+    parentId,
+  }));
+  const edges = topics
+    .filter((topic) => topic.parentId)
+    .map((topic) => ({
+      id: `edge-${topic.id}`,
+      source: topic.parentId as string,
+      target: topic.id,
+    }));
+  return { nodes, edges };
+}
+
+export function buildTopicPath(
+  topics: TopicRecord[],
+  topicId: string
+): TopicRecord[] {
+  const map = new Map(topics.map((t) => [t.id, t]));
+  const path: TopicRecord[] = [];
+  let current: TopicRecord | undefined = map.get(topicId);
+  while (current) {
+    path.unshift(current);
+    current = current.parentId ? map.get(current.parentId) : undefined;
+  }
+  return path;
+}
+
+export function formatTopicPath(path: TopicRecord[]): string {
+  return path.map((t) => t.name).join(" > ");
 }

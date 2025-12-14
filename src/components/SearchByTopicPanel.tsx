@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Card,
   List,
   Select,
@@ -203,38 +202,33 @@ function SearchByTopicPanel({
           }}
           renderItem={(entry) => (
             <List.Item
-              actions={[
-                <Button
-                  key="open"
-                  type="link"
-                  onClick={() => void handleOpenReference(entry)}
-                >
-                  Open Reference
-                </Button>,
-              ]}
+              className="topic-ref-item"
+              style={{ cursor: "pointer" }}
+              onClick={() => void handleOpenReference(entry)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  void handleOpenReference(entry);
+                }
+              }}
+              role="button"
+              tabIndex={0}
             >
               <List.Item.Meta
                 title={
-                  entry.pdf
-                    ? `${entry.pdf.title}`
-                    : entry.highlight.pdfId ?? "PDF"
+                  <Typography.Text>
+                    {entry.highlight.description?.trim() || "No Description"}
+                  </Typography.Text>
                 }
                 description={
                   <Space direction="vertical" size={4}>
-                    <Typography.Text strong>
-                      {entry.highlight.description?.trim() ||
-                        entry.pdf?.title ||
-                        entry.highlight.pdfId ||
-                        "Highlight"}
-                    </Typography.Text>
-                    <span>
-                      {entry.pdf ? `${entry.pdf.title} · ` : ""}
+                    <Typography.Text type="secondary">
                       Page {entry.highlight.page}
                       {entry.highlight.book ? ` · ${entry.highlight.book}` : ""}
                       {entry.highlight.volume
                         ? ` · Vol ${entry.highlight.volume}`
                         : ""}
-                    </span>
+                    </Typography.Text>
                     {entry.highlight.tags?.length ? (
                       <Space wrap size={4}>
                         {entry.highlight.tags.map((tag) => (

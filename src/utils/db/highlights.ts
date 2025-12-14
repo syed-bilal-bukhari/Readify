@@ -36,3 +36,10 @@ export async function getHighlightsByTopic(
   const all = (await db.getAll(STORE_HIGHLIGHTS)) as HighlightRecord[];
   return all.filter((hl) => hl.topicIds?.includes(topicId));
 }
+
+export async function deleteHighlightRecord(id: string): Promise<void> {
+  const db = await getDb();
+  const tx = db.transaction(STORE_HIGHLIGHTS, "readwrite");
+  await tx.store.delete(id);
+  await tx.done;
+}

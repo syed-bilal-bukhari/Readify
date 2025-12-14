@@ -1,0 +1,66 @@
+import { Collapse } from "antd";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
+import PdfListSidebar from "./PdfListSidebar";
+import SearchByTopicPanel from "./SearchByTopicPanel";
+import TopicTreePanel from "./TopicTreePanel";
+
+function GlobalSidebar() {
+  const { setSelectedPdfById } = useApp();
+  const [focusedTopicId, setFocusedTopicId] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleOpenReference = (payload: {
+    pdfId: string;
+    highlightId: string;
+    page?: number;
+  }) => {
+    void setSelectedPdfById(payload.pdfId);
+    navigate("/", {
+      state: {
+        focusHighlightId: payload.highlightId,
+        focusPage: payload.page,
+        focusPdfId: payload.pdfId,
+      },
+    });
+  };
+
+  return (
+    <div className="global-sider-body">
+      <Collapse
+        bordered={false}
+        defaultActiveKey={["pdfs"]}
+        style={{ width: "100%" }}
+        items={[
+          {
+            key: "pdfs",
+            label: "PDF Library",
+            children: <PdfListSidebar />,
+          },
+          {
+            key: "search",
+            label: "Search by Topic",
+            children: (
+              <SearchByTopicPanel
+                title="Search by Topic"
+                compact
+                onOpenReference={handleOpenReference}
+                onTopicSelect={(topicId) => setFocusedTopicId(topicId)}
+              />
+            ),
+          },
+          {
+            key: "topics",
+            label: "Topics Tree",
+            children: (
+              <TopicTreePanel focusTopicId={focusedTopicId ?? undefined} />
+            ),
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+export default GlobalSidebar;

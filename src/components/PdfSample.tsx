@@ -14,13 +14,22 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import type { Highlight } from "../types/pdfHighlight";
-import { addHighlightRecord, getHighlightsByPdf } from "../utils/db/highlights";
+import {
+  addHighlightRecord,
+  deleteHighlightRecord,
+  getHighlightsByPdf,
+} from "../utils/db/highlights";
 import { getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import HighlightDetailsModal from "./HighlightDetailsModal";
 import HighlightMetadataModal from "./HighlightMetadataModal";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+const BASE_PAGE_WIDTH = 520;
+const MIN_ZOOM = 0.6;
+const MAX_ZOOM = 2.4;
+const ZOOM_STEP = 0.2;
 
 type PdfSource = { url?: string; name?: string; id?: string };
 
@@ -54,6 +63,7 @@ function PdfSample({
   const [selectedHighlight, setSelectedHighlight] = useState<Highlight | null>(
     null
   );
+  const [zoom, setZoom] = useState(1);
   const hasNotifiedInitialPageRef = useRef(false);
 
   const topicNameMap = useMemo(() => {
@@ -215,8 +225,8 @@ function PdfSample({
   const handlePageMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!drawMode || !pageRef.current) return;
     const pageRect = pageRef.current.getBoundingClientRect();
-    const startX = event.clientX - pageRect.left;
-    const startY = event.clientY - pageRect.top;
+    const startX = (event.clientX - pageRect.left) / zoom;
+    const startY = (event.clientY - pageRect.top) / zoom;
     setDraftBox({
       id: "draft",
       page: currentPage,
@@ -231,8 +241,8 @@ function PdfSample({
   const handlePageMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!draftBox || !pageRef.current) return;
     const pageRect = pageRef.current.getBoundingClientRect();
-    const currentX = event.clientX - pageRect.left;
-    const currentY = event.clientY - pageRect.top;
+    const currentX = (event.clientX - pageRect.left) / zoom;
+    const currentY = (event.clientY - pageRect.top) / zoom;
     const left = Math.min(draftBox.left, currentX);
     const top = Math.min(draftBox.top, currentY);
     const width = Math.abs(currentX - draftBox.left);
@@ -313,6 +323,38 @@ function PdfSample({
     }
   };
 
+  const clampZoom = (value: number) =>
+    Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value));
+  const handleZoomChange = (delta: number) => {
+    setZoom((prev) => Number(clampZoom(Number((prev + delta).toFixed(2)))));
+  };
+  const handleResetZoom = () => setZoom(1);
+
+  const handleClearSelectedHighlight = async () => {
+    if (!selectedHighlight) return;
+    try {
+      setHighlights((prev) =>
+        prev.filter((hl) => hl.id !== selectedHighlight.id)
+      );
+      if (selectedHighlight.id) {
+        await deleteHighlightRecord(selectedHighlight.id);
+      }
+      setSelectedHighlight(null);
+      setViewModalOpen(false);
+      message.success("Highlight removed.");
+    } catch (err) {
+      message.error("Unable to remove highlight.");
+      // eslint-disable-next-line no-console
+      console.error("Failed to delete highlight", err);
+    }
+  };
+
+  const downloadPlaceholder = () => {
+    message.info("Download is not available yet.");
+  };
+
+  const scaledPageWidth = BASE_PAGE_WIDTH * zoom;
+
   return (
     <Card title={docTitle} className="pdf-card">
       <Space direction="vertical" size="middle" className="pdf-space">
@@ -326,44 +368,83 @@ function PdfSample({
             refresh. ({loadError})
           </Typography.Text>
         ) : null}
-        <Flex align="center" gap={8} wrap>
-          <Button
-            onClick={() => setCurrentPage((p) => clampPage(p - 1))}
-            disabled={currentPage <= 1}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={() => setCurrentPage((p) => clampPage(p + 1))}
-            disabled={currentPage >= totalPages}
-          >
-            Next
-          </Button>
-          <Typography.Text>
-            Page {currentPage}{" "}
-            {totalPagesDisplay ? `of ${totalPagesDisplay}` : ""}
-          </Typography.Text>
-          <Button
-            type={drawMode ? "primary" : "default"}
-            onClick={() => {
-              setDrawMode((prev) => !prev);
-            }}
-          >
-            {drawMode ? "Drawing mode on" : "Box highlight mode"}
-          </Button>
-          <InputNumber
-            min={1}
-            max={totalPages || 1}
-            value={currentPage}
-            disabled={!numPages}
-            onChange={(value) => {
-              const numeric = typeof value === "number" ? value : currentPage;
-              setCurrentPage(clampPage(numeric));
-            }}
-            style={{ width: 100 }}
-          />
+        <Flex
+          className="pdf-toolbar"
+          gap={12}
+          wrap
+          align="center"
+          justify="space-between"
+        >
+          <Flex align="center" gap={8} wrap>
+            <Button
+              onClick={() => setCurrentPage((p) => clampPage(p - 1))}
+              disabled={currentPage <= 1}
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={() => setCurrentPage((p) => clampPage(p + 1))}
+              disabled={currentPage >= totalPages}
+            >
+              Next
+            </Button>
+            <Typography.Text>
+              Page {currentPage}{" "}
+              {totalPagesDisplay ? `of ${totalPagesDisplay}` : ""}
+            </Typography.Text>
+            <InputNumber
+              min={1}
+              max={totalPages || 1}
+              value={currentPage}
+              disabled={!numPages}
+              onChange={(value) => {
+                const numeric = typeof value === "number" ? value : currentPage;
+                setCurrentPage(clampPage(numeric));
+              }}
+              style={{ width: 100 }}
+            />
+          </Flex>
+          <Flex align="center" gap={8} wrap>
+            <Button
+              onClick={() => handleZoomChange(-ZOOM_STEP)}
+              disabled={zoom <= MIN_ZOOM}
+            >
+              -
+            </Button>
+            <Typography.Text>{Math.round(zoom * 100)}%</Typography.Text>
+            <Button
+              onClick={() => handleZoomChange(ZOOM_STEP)}
+              disabled={zoom >= MAX_ZOOM}
+            >
+              +
+            </Button>
+            <Button onClick={handleResetZoom}>Reset Zoom</Button>
+          </Flex>
+          <Flex align="center" gap={8} wrap>
+            <Button
+              type={drawMode ? "primary" : "default"}
+              onClick={() => {
+                setDrawMode((prev) => !prev);
+              }}
+            >
+              Highlight
+            </Button>
+            <Button onClick={downloadPlaceholder}>Download</Button>
+          </Flex>
         </Flex>
-        <Flex justify="center" className="pdf-container" ref={containerRef}>
+        <Flex
+          justify="center"
+          className="pdf-container"
+          ref={containerRef}
+          style={{
+            maxHeight: 720,
+            minHeight: 400,
+            overflow: "auto",
+            padding: 16,
+            border: "1px solid #f0f0f0",
+            borderRadius: 8,
+          }}
+        >
           {hasFile && activeSource ? (
             <div
               className="pdf-page-wrap"
@@ -371,6 +452,7 @@ function PdfSample({
               onMouseDown={handlePageMouseDown}
               onMouseMove={handlePageMouseMove}
               onMouseUp={handlePageMouseUp}
+              style={{ width: scaledPageWidth }}
             >
               {highlights
                 .filter((hl) => hl.page === currentPage)
@@ -382,10 +464,10 @@ function PdfSample({
                     data-highlight-page={hl.page}
                     data-highlight-pdf={source?.id ?? ""}
                     style={{
-                      top: hl.top,
-                      left: hl.left,
-                      width: hl.width,
-                      height: hl.height,
+                      top: hl.top * zoom,
+                      left: hl.left * zoom,
+                      width: hl.width * zoom,
+                      height: hl.height * zoom,
                     }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
@@ -399,10 +481,10 @@ function PdfSample({
                 <div
                   className="pdf-highlight pdf-highlight-draft"
                   style={{
-                    top: draftBox.top,
-                    left: draftBox.left,
-                    width: draftBox.width,
-                    height: draftBox.height,
+                    top: draftBox.top * zoom,
+                    left: draftBox.left * zoom,
+                    width: draftBox.width * zoom,
+                    height: draftBox.height * zoom,
                   }}
                 />
               ) : null}
@@ -431,7 +513,7 @@ function PdfSample({
               >
                 <Page
                   pageNumber={currentPage}
-                  width={520}
+                  width={scaledPageWidth}
                   renderAnnotationLayer={false}
                   renderTextLayer={false}
                 />
@@ -462,6 +544,7 @@ function PdfSample({
         }}
         highlight={selectedHighlight}
         topicNameMap={topicNameMap}
+        onClear={handleClearSelectedHighlight}
       />
     </Card>
   );

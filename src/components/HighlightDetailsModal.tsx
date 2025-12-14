@@ -1,4 +1,4 @@
-import { Modal, Space, Tag, Typography } from "antd";
+import { Button, Modal, Space, Tag, Typography } from "antd";
 import type { Highlight } from "../types/pdfHighlight";
 
 type HighlightDetailsModalProps = {
@@ -6,6 +6,7 @@ type HighlightDetailsModalProps = {
   highlight: Highlight | null;
   onClose: () => void;
   topicNameMap: Map<string, string>;
+  onClear: () => void;
 };
 
 const HighlightDetailsModal = ({
@@ -13,8 +14,21 @@ const HighlightDetailsModal = ({
   highlight,
   onClose,
   topicNameMap,
+  onClear,
 }: HighlightDetailsModalProps) => (
-  <Modal title="Highlight Details" open={open} onCancel={onClose} footer={null}>
+  <Modal
+    title="Highlight Details"
+    open={open}
+    onCancel={onClose}
+    footer={[
+      <Button key="close" onClick={onClose}>
+        Close
+      </Button>,
+      <Button key="clear" danger onClick={onClear} disabled={!highlight}>
+        Clear Highlight
+      </Button>,
+    ]}
+  >
     {highlight ? (
       <Space direction="vertical" size="small" style={{ width: "100%" }}>
         <Typography.Text>Page: {highlight.page}</Typography.Text>

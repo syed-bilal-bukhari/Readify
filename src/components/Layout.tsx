@@ -3,15 +3,11 @@ import { Outlet } from "react-router-dom";
 import "./Layout.css";
 import NavBar from "./NavBar";
 
-const { Content } = AntLayout;
-
 function Layout() {
   return (
-    <AntLayout className="app-shell">
+    <AntLayout className="app-main">
       <NavBar />
-      <Content className="content">
-        <Outlet />
-      </Content>
+      <Outlet />
     </AntLayout>
   );
 }

@@ -1,7 +1,24 @@
-.app-shell {
+.app-main {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f8fafc;
-  color: #0f172a;
+}
+
+.global-sider {
+  background: #ffffff;
+  border-right: 1px solid #f0f0f0;
+}
+
+.global-sider-body {
+  height: 100%;
+  overflow: auto;
+}
+
+.global-sider-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
 }
 
 .app-header {
@@ -56,9 +73,4 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-.content {
-  padding: 2rem;
-  width: 100%;
 }

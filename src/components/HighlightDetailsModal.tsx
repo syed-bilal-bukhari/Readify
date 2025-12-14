@@ -41,6 +41,16 @@ const HighlightDetailsModal = ({
         {highlight.chapter ? (
           <Typography.Text>Chapter: {highlight.chapter}</Typography.Text>
         ) : null}
+        {highlight.description ? (
+          <Space direction="vertical" size={4} style={{ width: "100%" }}>
+            <Typography.Text strong>Description</Typography.Text>
+            <Typography.Paragraph
+              style={{ margin: 0, whiteSpace: "pre-wrap" }}
+            >
+              {highlight.description}
+            </Typography.Paragraph>
+          </Space>
+        ) : null}
         {highlight.tags?.length ? (
           <Space wrap>
             {highlight.tags.map((tag) => (

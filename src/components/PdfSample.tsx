@@ -1,3 +1,4 @@
+import { HighlightOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -422,9 +423,8 @@ function PdfSample({
               onClick={() => {
                 setDrawMode((prev) => !prev);
               }}
-            >
-              Highlight
-            </Button>
+              icon={<HighlightOutlined style={{ color: "#faad14" }} />}
+            />
             <Button onClick={downloadPlaceholder}>Download</Button>
           </Flex>
         </Flex>

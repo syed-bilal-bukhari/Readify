@@ -1,0 +1,243 @@
+/* === SearchByTopicPanel Glassmorphism Theme === */
+
+/* Main Card Container */
+.search-topic-panel {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  border: none;
+  box-shadow: 0 20px 40px rgba(101, 80, 60, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.search-topic-panel .ant-card-head {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 16px 24px;
+}
+
+.search-topic-panel .ant-card-head-title {
+  color: #3d2e1e;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+
+.search-topic-panel .ant-card-body {
+  padding: 20px 24px;
+}
+
+/* === Search Select/Dropdown === */
+.search-topic-panel .topic-search-select .ant-select-selector {
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.08);
+  padding: 8px 16px !important;
+  height: auto !important;
+  min-height: 48px !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.search-topic-panel .topic-search-select .ant-select-selector:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 12px 32px rgba(90, 70, 50, 0.12);
+}
+
+.search-topic-panel
+  .topic-search-select.ant-select-focused
+  .ant-select-selector {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(209, 180, 150, 0.8) !important;
+  box-shadow: 0 12px 32px rgba(90, 70, 50, 0.15),
+    0 0 0 3px rgba(209, 180, 150, 0.2);
+}
+
+.search-topic-panel .topic-search-select .ant-select-selection-search-input {
+  color: #3d2e1e !important;
+  font-size: 15px;
+}
+
+.search-topic-panel .topic-search-select .ant-select-selection-placeholder {
+  color: #7d6b5a !important;
+  opacity: 0.8;
+}
+
+.search-topic-panel .topic-search-select .ant-select-arrow {
+  color: #7d6b5a;
+}
+
+.search-topic-panel .topic-search-select .ant-select-clear {
+  background: rgba(255, 255, 255, 0.8);
+  color: #7d6b5a;
+}
+
+/* === Dropdown Menu === */
+.search-topic-dropdown {
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(90, 70, 50, 0.2);
+  padding: 8px !important;
+  overflow: hidden;
+}
+
+.search-topic-dropdown .ant-select-item {
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 4px 0;
+  transition: all 0.2s ease;
+  color: #3d2e1e;
+}
+
+.search-topic-dropdown .ant-select-item-option-active {
+  background: rgba(209, 180, 150, 0.3) !important;
+}
+
+.search-topic-dropdown .ant-select-item-option-selected {
+  background: rgba(209, 180, 150, 0.5) !important;
+  font-weight: 600;
+}
+
+.search-topic-dropdown .ant-select-item-option-content {
+  color: #3d2e1e;
+}
+
+.search-topic-dropdown .ant-select-item-empty {
+  color: #7d6b5a;
+  padding: 16px;
+  text-align: center;
+}
+
+/* === References Section === */
+.search-topic-panel .references-title {
+  color: #3d2e1e;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* === References List === */
+.search-topic-panel .references-list {
+  background: transparent;
+}
+
+.search-topic-panel .references-list .ant-list-empty-text {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 24px;
+  color: #7d6b5a;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.search-topic-panel .references-list .ant-spin-nested-loading {
+  min-height: 80px;
+}
+
+/* === Reference Item (Glass Card) === */
+.search-topic-panel .topic-ref-item {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  margin-bottom: 12px;
+  padding: 16px !important;
+  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.08);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.search-topic-panel .topic-ref-item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(90, 70, 50, 0.15);
+  border-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.search-topic-panel .topic-ref-item:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.1);
+}
+
+.search-topic-panel .topic-ref-item:focus-visible {
+  outline: none;
+  box-shadow: 0 16px 40px rgba(90, 70, 50, 0.15),
+    0 0 0 3px rgba(209, 180, 150, 0.4);
+}
+
+/* Reference Item Content */
+.search-topic-panel .topic-ref-item .ant-list-item-meta-title {
+  color: #3d2e1e;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.search-topic-panel .topic-ref-item .ant-list-item-meta-description {
+  color: #7d6b5a;
+}
+
+/* === Tags === */
+.search-topic-panel .topic-ref-item .ant-tag {
+  background: rgba(209, 180, 150, 0.3);
+  border: 1px solid rgba(209, 180, 150, 0.5);
+  border-radius: 8px;
+  color: #4b3b2a;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 10px;
+  transition: all 0.2s ease;
+}
+
+.search-topic-panel .topic-ref-item .ant-tag:hover {
+  background: rgba(209, 180, 150, 0.5);
+  border-color: rgba(209, 180, 150, 0.7);
+}
+
+/* === Alert Styling === */
+.search-topic-panel .ant-alert-error {
+  background: rgba(255, 77, 79, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  border-radius: 12px;
+}
+
+/* === Loading State === */
+.search-topic-panel .ant-spin-dot-item {
+  background-color: #7d6b5a;
+}
+
+/* === Scrollbar Styling === */
+.search-topic-panel .references-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-topic-panel .references-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.search-topic-panel .references-list::-webkit-scrollbar-thumb {
+  background: rgba(125, 107, 90, 0.4);
+  border-radius: 3px;
+}
+
+.search-topic-panel .references-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 107, 90, 0.6);
+}

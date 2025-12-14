@@ -14,7 +14,6 @@ import ReactFlow, {
   Background,
   Controls,
   Handle,
-  MiniMap,
   Position,
   ReactFlowProvider,
   type Edge,
@@ -30,6 +29,7 @@ import {
 } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import { buildTopicGraph } from "../utils/topics/graph";
+import "./TopicTreePanel.css";
 
 type TopicNodeData = {
   topic: TopicRecord;
@@ -315,7 +315,7 @@ function TopicTreePanel({
           </Button>
         }
         loading={loading}
-        className="topic-flow-card"
+        className="topic-tree-panel"
         bordered={bordered}
       >
         <div className="topic-flow-wrapper" style={{ height: flowHeight }}>
@@ -328,7 +328,6 @@ function TopicTreePanel({
               proOptions={{ hideAttribution: true }}
             >
               <Background gap={24} />
-              <MiniMap pannable zoomable />
               <Controls />
             </ReactFlow>
           </ReactFlowProvider>
@@ -341,6 +340,7 @@ function TopicTreePanel({
         onOk={handleAddTopic}
         onCancel={() => setAddModalOpen(false)}
         okText="Create"
+        className="topic-modal"
       >
         <Form layout="vertical" form={form}>
           <Form.Item
@@ -356,6 +356,7 @@ function TopicTreePanel({
               options={topicOptions}
               allowClear
               showSearch
+              popupClassName="topic-modal-dropdown"
             />
           </Form.Item>
         </Form>
@@ -367,6 +368,7 @@ function TopicTreePanel({
         onOk={handleRenameTopic}
         onCancel={() => setRenameModalOpen(false)}
         okText="Save"
+        className="topic-modal"
       >
         <Form layout="vertical" form={renameForm}>
           <Form.Item
@@ -385,6 +387,7 @@ function TopicTreePanel({
         onOk={handleMoveTopic}
         onCancel={() => setMoveModalOpen(false)}
         okText="Move"
+        className="topic-modal"
       >
         <Form layout="vertical" form={moveForm}>
           <Form.Item name="parentId" label="New parent">
@@ -395,6 +398,7 @@ function TopicTreePanel({
               )}
               allowClear
               showSearch
+              popupClassName="topic-modal-dropdown"
             />
           </Form.Item>
         </Form>

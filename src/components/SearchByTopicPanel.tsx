@@ -20,6 +20,7 @@ import type {
   TopicRecord,
 } from "../utils/db/types";
 import { buildTopicPath, formatTopicPath } from "../utils/topics/graph";
+import "./SearchByTopicPanel.css";
 
 type ReferenceEntry = {
   highlight: HighlightRecord;
@@ -38,7 +39,6 @@ type SearchByTopicPanelProps = {
 };
 
 function SearchByTopicPanel({
-  title = "Search by Topic",
   compact = false,
   onOpenReference,
   onTopicSelect,
@@ -156,7 +156,7 @@ function SearchByTopicPanel({
     : null;
 
   return (
-    <Card title={title} size={compact ? "small" : "default"}>
+    <Card size={compact ? "small" : "default"} className="search-topic-panel">
       <Space direction="vertical" style={{ width: "100%" }} size="small">
         <Select
           showSearch
@@ -164,6 +164,7 @@ function SearchByTopicPanel({
           size="large"
           placeholder="Search topics"
           className="topic-search-select"
+          popupClassName="search-topic-dropdown"
           value={selectedTopicId ?? undefined}
           onSearch={(value) => setQuery(value)}
           onChange={(value) => {
@@ -171,7 +172,7 @@ function SearchByTopicPanel({
             onTopicSelect?.(value ?? null);
           }}
           filterOption={false}
-          style={{ width: "100%", marginBottom: 8 }}
+          style={{ width: "100%", height: "100%" }}
           options={(query ? results : []).map((item) => ({
             value: item.id,
             label: (
@@ -186,10 +187,7 @@ function SearchByTopicPanel({
           notFoundContent={query ? "No topics found" : null}
         />
 
-        <Typography.Text
-          strong
-          style={{ marginTop: 16, display: "inline-block" }}
-        >
+        <Typography.Text strong className="references-title">
           References
         </Typography.Text>
         {error ? <Alert type="error" message={error} /> : null}
@@ -197,13 +195,13 @@ function SearchByTopicPanel({
           size="small"
           loading={loadingRefs}
           dataSource={references}
+          className="references-list"
           locale={{
             emptyText: selectedTopic ? "No references" : "Select a topic",
           }}
           renderItem={(entry) => (
             <List.Item
               className="topic-ref-item"
-              style={{ cursor: "pointer" }}
               onClick={() => void handleOpenReference(entry)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {

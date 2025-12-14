@@ -108,6 +108,7 @@ function NavBar() {
           ref={importInputRef}
           type="file"
           accept="application/json"
+          style={{ display: "none" }}
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) {
@@ -117,8 +118,10 @@ function NavBar() {
               }
             }
           }}
-          style={{ width: 180 }}
         />
+        <Button onClick={() => importInputRef.current?.click()}>
+          Import Index
+        </Button>
       </div>
     </Header>
   );

@@ -1,18 +1,24 @@
+/* === Main App Container === */
 .app-main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f8fafc;
+  background: linear-gradient(180deg, #f5ebe0 0%, #ede0d4 50%, #e6d5c3 100%);
 }
 
+/* === Global Sidebar === */
 .global-sider {
-  background: #e9c8b1;
-  border-right: 1px solid #f0f0f0;
+  background: rgba(233, 200, 177, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 4px 0 20px rgba(101, 80, 60, 0.08);
 }
 
 .global-sider-body {
   height: 100%;
   overflow: auto;
+  padding: 16px;
 }
 
 .global-sider-toggle {
@@ -21,16 +27,35 @@
   margin-bottom: 12px;
 }
 
+.global-sider-toggle .ant-btn {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  color: #4b3b2a;
+  transition: all 0.2s ease;
+}
+
+.global-sider-toggle .ant-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #3d2e1e;
+}
+
+/* === Navbar Glassmorphism === */
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  border-bottom: 1px solid #e2e8f0;
-  background: #ffffff;
+  background: rgba(233, 200, 177, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(101, 80, 60, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
+  height: 64px;
 }
 
 .brand {
@@ -41,6 +66,7 @@
 
 .brand-mark {
   font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .brand-text {
@@ -52,25 +78,128 @@
 .brand-title {
   margin: 0;
   font-weight: 700;
-  color: #0f172a;
+  color: #3d2e1e;
+  letter-spacing: -0.3px;
 }
 
 .brand-subtitle {
   margin: 0;
-  font-size: 0.9rem;
-  color: #475569;
+  font-size: 0.75rem;
+  color: #7d6b5a;
+  font-weight: 500;
 }
 
+/* === Nav Menu === */
 .nav {
   min-width: 320px;
   border: none;
   justify-content: flex-end;
   flex: 1;
-  background: transparent;
+  background: transparent !important;
 }
 
+.nav.ant-menu-horizontal {
+  border-bottom: none;
+  line-height: 62px;
+}
+
+.nav .ant-menu-item {
+  color: #4b3b2a !important;
+  font-weight: 500;
+  margin: 0 4px;
+  padding: 0 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.nav .ant-menu-item::after {
+  display: none;
+}
+
+.nav .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.4) !important;
+  color: #3d2e1e !important;
+}
+
+.nav .ant-menu-item-selected {
+  background: rgba(255, 255, 255, 0.5) !important;
+  color: #3d2e1e !important;
+  font-weight: 600;
+}
+
+.nav .ant-menu-item a {
+  color: inherit;
+}
+
+/* === Header Action Buttons === */
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.header-actions .ant-btn-primary {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  color: #3d2e1e;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(90, 70, 50, 0.1);
+  transition: all 0.3s ease;
+}
+
+.header-actions .ant-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.8);
+  color: #3d2e1e;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(90, 70, 50, 0.15);
+}
+
+.header-actions .ant-btn-default {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  color: #4b3b2a;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.header-actions .ant-btn-default:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #3d2e1e;
+}
+
+/* Style the file input */
+.header-actions input[type="file"] {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  color: #4b3b2a;
+  padding: 4px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.header-actions input[type="file"]:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.header-actions input[type="file"]::file-selector-button {
+  background: rgba(209, 180, 150, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  color: #3d2e1e;
+  padding: 4px 12px;
+  margin-right: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-actions input[type="file"]::file-selector-button:hover {
+  background: rgba(209, 180, 150, 0.7);
 }

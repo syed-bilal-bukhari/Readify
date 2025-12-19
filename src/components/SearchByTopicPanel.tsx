@@ -30,6 +30,7 @@ type ReferenceEntry = {
 type SearchByTopicPanelProps = {
   title?: string;
   compact?: boolean;
+  selectedTopicId?: string | null;
   onOpenReference?: (payload: {
     pdfId: string;
     highlightId: string;
@@ -40,6 +41,7 @@ type SearchByTopicPanelProps = {
 
 function SearchByTopicPanel({
   compact = false,
+  selectedTopicId: externalSelectedTopicId,
   onOpenReference,
   onTopicSelect,
 }: SearchByTopicPanelProps) {
@@ -48,6 +50,13 @@ function SearchByTopicPanel({
   const [topics, setTopics] = useState<TopicRecord[]>([]);
   const [query, setQuery] = useState("");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+
+  // Sync external selection with internal state
+  useEffect(() => {
+    if (externalSelectedTopicId !== undefined) {
+      setSelectedTopicId(externalSelectedTopicId);
+    }
+  }, [externalSelectedTopicId]);
   const [references, setReferences] = useState<ReferenceEntry[]>([]);
   const [loadingRefs, setLoadingRefs] = useState(false);
   const [error, setError] = useState<string | null>(null);

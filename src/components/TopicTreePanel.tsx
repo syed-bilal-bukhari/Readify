@@ -145,6 +145,7 @@ type TopicTreePanelProps = {
   bordered?: boolean;
   focusTopicId?: string | null;
   showOnlySubtree?: boolean;
+  onNodeClick?: (topicId: string) => void;
 };
 
 function TopicTreePanel({
@@ -153,6 +154,7 @@ function TopicTreePanel({
   bordered = true,
   focusTopicId = null,
   showOnlySubtree = false,
+  onNodeClick,
 }: TopicTreePanelProps) {
   const [topics, setTopics] = useState<TopicRecord[]>([]);
   const [loading, setLoading] = useState(false);
@@ -326,6 +328,7 @@ function TopicTreePanel({
               fitView
               nodeTypes={nodeTypes}
               proOptions={{ hideAttribution: true }}
+              onNodeClick={(_, node) => onNodeClick?.(node.id)}
             >
               <Background gap={24} />
               <Controls />

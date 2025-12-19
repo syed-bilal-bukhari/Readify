@@ -17,12 +17,14 @@ function TopicsPage() {
       <Space direction="vertical" style={{ width: "100%" }} size="large">
         <SearchByTopicPanel
           title="Search by Topic"
+          selectedTopicId={focusedTopicId}
           onTopicSelect={(topicId) => setFocusedTopicId(topicId)}
         />
         <TopicTreePanel
           flowHeight={600}
           bordered={false}
           focusTopicId={focusedTopicId ?? undefined}
+          onNodeClick={(topicId) => setFocusedTopicId(topicId)}
         />
       </Space>
     </section>

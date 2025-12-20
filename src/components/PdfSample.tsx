@@ -5,6 +5,7 @@ import {
   Flex,
   Form,
   InputNumber,
+  Select,
   Space,
   Typography,
   message,
@@ -20,6 +21,11 @@ import {
   deleteHighlightRecord,
   getHighlightsByPdf,
 } from "../utils/db/highlights";
+import {
+  readReadingDirection,
+  saveReadingDirection,
+  type ReadingDirection,
+} from "../utils/db/settings";
 import { getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import { capturePageAsImage } from "../utils/pdfCapture";
@@ -67,6 +73,8 @@ function PdfSample({
   );
   const [zoom, setZoom] = useState(1);
   const hasNotifiedInitialPageRef = useRef(false);
+  const [readingDirection, setReadingDirection] =
+    useState<ReadingDirection>("ltr");
 
   const topicNameMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -332,6 +340,13 @@ function PdfSample({
   };
   const handleResetZoom = () => setZoom(1);
 
+  const goNextPage = () => {
+    setCurrentPage((p) => clampPage(p + 1));
+  };
+  const goPrevPage = () => {
+    setCurrentPage((p) => clampPage(p - 1));
+  };
+
   const handleClearSelectedHighlight = async () => {
     if (!selectedHighlight) return;
     try {
@@ -378,6 +393,77 @@ function PdfSample({
 
   const scaledPageWidth = BASE_PAGE_WIDTH * zoom;
 
+  // Load and persist per-PDF reading direction
+  useEffect(() => {
+    let cancelled = false;
+    const loadDir = async () => {
+      const pdfId = source?.id;
+      if (!pdfId) {
+        setReadingDirection("ltr");
+        return;
+      }
+      try {
+        const stored = await readReadingDirection(pdfId);
+        if (!cancelled) {
+          setReadingDirection(stored ?? "ltr");
+        }
+      } catch {
+        if (!cancelled) setReadingDirection("ltr");
+      }
+    };
+    void loadDir();
+    return () => {
+      cancelled = true;
+    };
+  }, [source?.id]);
+
+  // Global arrow-key navigation when a PDF is open
+  useEffect(() => {
+    if (!hasFile || !activeSource) return;
+    const handler = (e: KeyboardEvent) => {
+      // Disable when modals are open
+      if (metadataModalOpen || viewModalOpen) return;
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName?.toLowerCase();
+      const isInteractive =
+        tag === "input" ||
+        tag === "textarea" ||
+        tag === "select" ||
+        target?.isContentEditable;
+      if (isInteractive) return;
+
+      let handled = false;
+      if (e.key === "ArrowRight") {
+        if (readingDirection === "ltr") {
+          goNextPage();
+        } else {
+          goPrevPage();
+        }
+        handled = true;
+      } else if (e.key === "ArrowLeft") {
+        if (readingDirection === "ltr") {
+          goPrevPage();
+        } else {
+          goNextPage();
+        }
+        handled = true;
+      }
+      if (handled) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [
+    hasFile,
+    activeSource,
+    metadataModalOpen,
+    viewModalOpen,
+    readingDirection,
+  ]);
+
   return (
     <Card title={docTitle} className="pdf-card">
       <Space direction="vertical" size="middle" className="pdf-space">
@@ -395,22 +481,12 @@ function PdfSample({
           justify="space-between"
         >
           <Flex align="center" gap={8} wrap>
-            <Button
-              onClick={() => setCurrentPage((p) => clampPage(p - 1))}
-              disabled={currentPage <= 1}
-            >
+            <Button onClick={goPrevPage} disabled={currentPage <= 1}>
               Previous
             </Button>
-            <Button
-              onClick={() => setCurrentPage((p) => clampPage(p + 1))}
-              disabled={currentPage >= totalPages}
-            >
+            <Button onClick={goNextPage} disabled={currentPage >= totalPages}>
               Next
             </Button>
-            <Typography.Text>
-              Page {currentPage}{" "}
-              {totalPagesDisplay ? `of ${totalPagesDisplay}` : ""}
-            </Typography.Text>
             <InputNumber
               min={1}
               max={totalPages || 1}
@@ -420,8 +496,11 @@ function PdfSample({
                 const numeric = typeof value === "number" ? value : currentPage;
                 setCurrentPage(clampPage(numeric));
               }}
-              style={{ width: 100 }}
+              style={{ width: 50 }}
             />
+            <Typography.Text>
+              {totalPagesDisplay ? `of ${totalPagesDisplay}` : ""}
+            </Typography.Text>
           </Flex>
           <Flex align="center" gap={8} wrap>
             <Button
@@ -446,6 +525,25 @@ function PdfSample({
                 setDrawMode((prev) => !prev);
               }}
               icon={<HighlightOutlined style={{ color: "#faad14" }} />}
+            />
+            <Select
+              value={readingDirection}
+              onChange={async (val) => {
+                const dir = val as ReadingDirection;
+                setReadingDirection(dir);
+                if (source?.id) {
+                  try {
+                    await saveReadingDirection(source.id, dir);
+                  } catch {
+                    /* ignore */
+                  }
+                }
+              }}
+              options={[
+                { label: "English (LTR)", value: "ltr" },
+                { label: "Arabic/Urdu (RTL)", value: "rtl" },
+              ]}
+              style={{ width: 180 }}
             />
             <Button onClick={handleCapture}>Capture</Button>
           </Flex>

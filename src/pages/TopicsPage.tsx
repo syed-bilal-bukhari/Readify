@@ -1,4 +1,4 @@
-import { Space, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import { useState } from "react";
 import SearchByTopicPanel from "../components/SearchByTopicPanel";
 import TopicTreePanel from "../components/TopicTreePanel";
@@ -13,19 +13,23 @@ function TopicsPage() {
         Manage the full topic hierarchy. Add, rename, or move nodes and explore
         the graph layout.
       </Typography.Paragraph>
-      <Space direction="vertical" style={{ width: "100%" }} size="large">
-        <SearchByTopicPanel
-          title="Search by Topic"
-          selectedTopicId={focusedTopicId}
-          onTopicSelect={(topicId) => setFocusedTopicId(topicId)}
-        />
-        <TopicTreePanel
-          flowHeight={600}
-          bordered={false}
-          focusTopicId={focusedTopicId ?? undefined}
-          onNodeClick={(topicId) => setFocusedTopicId(topicId)}
-        />
-      </Space>
+      <Row gutter={[16, 16]} style={{ width: "100%" }}>
+        <Col xs={24} md={10} lg={8}>
+          <SearchByTopicPanel
+            title="Search by Topic"
+            selectedTopicId={focusedTopicId}
+            onTopicSelect={(topicId) => setFocusedTopicId(topicId)}
+          />
+        </Col>
+        <Col xs={24} md={14} lg={16}>
+          <TopicTreePanel
+            flowHeight={600}
+            bordered={false}
+            focusTopicId={focusedTopicId ?? undefined}
+            onNodeClick={(topicId) => setFocusedTopicId(topicId)}
+          />
+        </Col>
+      </Row>
     </section>
   );
 }

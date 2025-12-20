@@ -182,17 +182,19 @@ function SearchByTopicPanel({
           }}
           filterOption={false}
           style={{ width: "100%", height: "100%" }}
-          options={(query ? results : []).map((item) => ({
-            value: item.id,
-            label: (
-              <Space direction="vertical" size={0}>
-                <span>{item.name}</span>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {pathLookup[item.id]}
-                </Typography.Text>
-              </Space>
-            ),
-          }))}
+          options={(query ? results : selectedTopic ? [selectedTopic] : []).map(
+            (item) => ({
+              value: item.id,
+              label: (
+                <Space direction="vertical" size={0}>
+                  <span>{item.name}</span>
+                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                    {pathLookup[item.id]}
+                  </Typography.Text>
+                </Space>
+              ),
+            })
+          )}
           notFoundContent={query ? "No topics found" : null}
         />
 

@@ -1,7 +1,8 @@
-import { Layout as AntLayout, Button, Menu, Typography } from "antd";
+import { Layout as AntLayout, Button, Menu } from "antd";
 import type { ChangeEvent } from "react";
 import { useMemo, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import logoPng from "../assets/logo.png";
 import { useApp } from "../context/AppContext";
 import { exportPdfIndex, importPdfIndex } from "../utils/db/backup";
 import { ROUTES } from "../utils/routes";
@@ -76,15 +77,11 @@ function NavBar() {
   return (
     <Header className="app-header">
       <div className="brand">
-        <span className="brand-mark">📘</span>
-        <div className="brand-text">
-          <Typography.Text strong className="brand-title">
-            {appName}
-          </Typography.Text>
-          <Typography.Text type="secondary" className="brand-subtitle">
-            Read → Highlight → Categorize
-          </Typography.Text>
-        </div>
+        <img
+          src={logoPng}
+          alt={appName}
+          style={{ height: "60px", objectFit: "contain" }}
+        />
       </div>
       <Menu
         mode="horizontal"

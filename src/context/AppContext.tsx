@@ -22,7 +22,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<AppContextValue>(
     () => ({
-      appName: "PDF Knowledge Explorer",
+      appName: "Readify",
       selectedPdf,
       setSelectedPdfFromPath,
       setSelectedPdfFromFile,

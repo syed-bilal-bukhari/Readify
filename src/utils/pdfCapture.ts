@@ -57,12 +57,12 @@ export const capturePageAsImage = async ({
       const w = hl.width * zoom * scaleRatio;
       const h = hl.height * zoom * scaleRatio;
 
-      // Draw highlight box with same styling as CSS
-      ctx.fillStyle = "rgba(252, 211, 77, 0.45)";
+      // Draw highlight box with same styling as CSS (brand color #FF0073)
+      ctx.fillStyle = "rgba(255, 0, 115, 0.3)";
       ctx.fillRect(x, y, w, h);
 
-      // Draw border
-      ctx.strokeStyle = "rgba(252, 211, 77, 0.6)";
+      // Draw border to mimic box-shadow in CSS
+      ctx.strokeStyle = "rgba(255, 0, 115, 0.5)";
       ctx.lineWidth = 1;
       ctx.strokeRect(x, y, w, h);
     });

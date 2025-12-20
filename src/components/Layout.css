@@ -1,18 +1,17 @@
 /* === Main App Container === */
+/* === Main App Container === */
 .app-main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #f5ebe0 0%, #ede0d4 50%, #e6d5c3 100%);
+  background: #ffffff;
 }
 
 /* === Global Sidebar === */
 .global-sider {
-  background: rgba(233, 200, 177, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 4px 0 20px rgba(101, 80, 60, 0.08);
+  background: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border-light);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
 }
 
 .global-sider-body {
@@ -28,17 +27,17 @@
 }
 
 .global-sider-toggle .ant-btn {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
   border-radius: 10px;
-  color: #4b3b2a;
+  color: var(--color-text-secondary);
   transition: all 0.2s ease;
 }
 
 .global-sider-toggle .ant-btn:hover {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #3d2e1e;
+  background: #fdfdfd;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* === Navbar Glassmorphism === */
@@ -47,11 +46,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  background: rgba(233, 200, 177, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 20px rgba(101, 80, 60, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  border-bottom: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -78,14 +77,14 @@
 .brand-title {
   margin: 0;
   font-weight: 700;
-  color: #3d2e1e;
-  letter-spacing: -0.3px;
+  color: var(--color-text-main);
+  letter-spacing: -0.5px;
 }
 
 .brand-subtitle {
   margin: 0;
   font-size: 0.75rem;
-  color: #7d6b5a;
+  color: var(--color-text-tertiary);
   font-weight: 500;
 }
 
@@ -104,7 +103,7 @@
 }
 
 .nav .ant-menu-item {
-  color: #4b3b2a !important;
+  color: var(--color-text-secondary) !important;
   font-weight: 500;
   margin: 0 4px;
   padding: 0 16px;
@@ -117,13 +116,13 @@
 }
 
 .nav .ant-menu-item:hover {
-  background: rgba(255, 255, 255, 0.4) !important;
-  color: #3d2e1e !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: var(--color-text-main) !important;
 }
 
 .nav .ant-menu-item-selected {
-  background: rgba(255, 255, 255, 0.5) !important;
-  color: #3d2e1e !important;
+  background: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
   font-weight: 600;
 }
 
@@ -138,45 +137,35 @@
   gap: 0.75rem;
 }
 
+/* Primary button styles are handled globally in index.css */
 .header-actions .ant-btn-primary {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 12px;
-  color: #3d2e1e;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(90, 70, 50, 0.1);
   transition: all 0.3s ease;
 }
 
-.header-actions .ant-btn-primary:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.8);
-  color: #3d2e1e;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(90, 70, 50, 0.15);
-}
-
 .header-actions .ant-btn-default {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
-  color: #4b3b2a;
+  color: var(--color-text-secondary);
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .header-actions .ant-btn-default:hover {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #3d2e1e;
+  background: #ffffff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Style the file input */
+/* Style the file input */
 .header-actions input[type="file"] {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
-  color: #4b3b2a;
+  color: var(--color-text-secondary);
   padding: 4px 12px;
   font-size: 13px;
   cursor: pointer;
@@ -184,15 +173,15 @@
 }
 
 .header-actions input[type="file"]:hover {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: #fdfdfd;
+  border-color: var(--color-primary);
 }
 
 .header-actions input[type="file"]::file-selector-button {
-  background: rgba(209, 180, 150, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  color: #3d2e1e;
+  color: var(--color-text-main);
   padding: 4px 12px;
   margin-right: 10px;
   font-weight: 500;
@@ -201,5 +190,6 @@
 }
 
 .header-actions input[type="file"]::file-selector-button:hover {
-  background: rgba(209, 180, 150, 0.7);
+  background: #e5e5e5;
+  color: var(--color-primary);
 }

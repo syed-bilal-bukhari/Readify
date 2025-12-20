@@ -1,6 +1,6 @@
-# 📘 PDF Knowledge Explorer — Introduction & Overview
+# 📘 Readify — Introduction & Overview
 
-**PDF Knowledge Explorer** is a local-first web application designed to help researchers, students, and academics read, highlight, organize, and retrieve information from large collections of PDF books with exceptional speed and structure.  
+**Readify** is a local-first web application designed to help researchers, students, and academics read, highlight, organize, and retrieve information from large collections of PDF books with exceptional speed and structure.  
 Instead of manually remembering where an important passage appeared inside a book, the system allows users to highlight text, classify it into topics, attach references (book, volume, chapter, page), and tag it for future retrieval. All highlights are stored in a structured database-like format, enabling fast search across **all PDFs**, not just the one currently open.
 
 The core concept is simple:
@@ -13,7 +13,7 @@ The application provides a clean, stable reading interface with a PDF viewer on 
 
 ## 🎯 Goal & Purpose
 
-The goal of PDF Knowledge Explorer is to create a **personal research companion** that seamlessly connects:
+The goal of Readify is to create a **personal research companion** that seamlessly connects:
 
 - What you read
 - What you highlight
@@ -75,7 +75,7 @@ By treating highlights as structured knowledge entries that can belong to multip
 
 ## 🧩 Why This Matters
 
-PDF Knowledge Explorer creates a powerful workflow:
+Readify creates a powerful workflow:
 
 **Read → Highlight → Categorize → Search → Open → Cite**
 

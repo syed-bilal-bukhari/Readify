@@ -1,10 +1,37 @@
 :root {
+  /* Typography */
   --font-family-base: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
-  line-height: 1.6;
+  --line-height-base: 1.6;
+
+  /* Colors */
+  --color-primary: #FF0073;
+  --color-primary-hover: #D90062;
+  --color-primary-light: rgba(255, 0, 115, 0.08);
+
+  --color-text-main: #111111;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+
+  --color-bg-body: #FFFFFF;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-glass: rgba(255, 255, 255, 0.75);
+
+  --color-border-light: rgba(0, 0, 0, 0.06);
+  --color-border-glass: rgba(255, 255, 255, 0.6);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  /* Glassmorphism Defaults */
+  --backdrop-blur: 16px;
+
+  line-height: var(--line-height-base);
   font-weight: 400;
-  color: #0f172a;
-  background-color: #f8fafc;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,8 +51,8 @@ body,
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: var(--color-bg-body);
+  color: var(--color-text-main);
 }
 
 button,
@@ -38,4 +65,58 @@ textarea {
 a {
   color: inherit;
   text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+/* Scrollbar Styling for Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* === Global Button Overrides === */
+/* Primary Buttons */
+.ant-btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 14px rgba(255, 0, 115, 0.25); /* Subtle pink shadow for pop */
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(255, 0, 115, 0.35);
+}
+
+/* Default/Ghost Buttons */
+.ant-btn-default {
+  border-color: #d9d9d9;
+  color: var(--color-text-main);
+}
+
+.ant-btn-default:not(:disabled):hover {
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  background-color: transparent !important; /* Keep it clean or maybe slight tint if preferred */
+}
+
+/* Ensure no blue rings on focus */
+.ant-btn:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px;
 }

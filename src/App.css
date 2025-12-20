@@ -4,36 +4,35 @@
 
 /* === Page Container Glassmorphism === */
 .page {
-  background: rgba(233, 200, 177, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 12px 40px rgba(101, 80, 60, 0.12);
+  box-shadow: none;
 }
 
 .page h1,
 .page .ant-typography h1 {
   margin-top: 0.25rem;
   margin-bottom: 0.75rem;
-  font-size: 2rem;
-  color: #3d2e1e !important;
+  font-size: 2.25rem;
+  color: var(--color-text-main) !important;
   font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .page p,
 .page .ant-typography {
   margin: 0 0 1rem 0;
-  color: #4b3b2a;
+  color: var(--color-text-secondary);
 }
 
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   font-size: 0.75rem;
-  font-weight: 700;
-  color: #7d6b5a;
+  font-weight: 600;
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -46,96 +45,96 @@
 
 /* === Card Glassmorphism === */
 .card {
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--color-border-glass);
   border-radius: 16px;
-  padding: 1.25rem;
-  box-shadow: 0 8px 24px rgba(101, 80, 60, 0.08);
-  transition: all 0.3s ease;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .card:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(101, 80, 60, 0.12);
+  background: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(0, 0, 0, 0.05);
 }
 
 .card h2 {
   margin-top: 0;
-  margin-bottom: 0.35rem;
-  font-size: 1.2rem;
-  color: #3d2e1e;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--color-text-main);
   font-weight: 600;
 }
 
 .card p {
-  margin: 0 0 0.75rem 0;
-  color: #4b3b2a;
+  margin: 0 0 1rem 0;
+  color: var(--color-text-secondary);
 }
 
 .text-link {
-  color: #7d5a3a;
-  font-weight: 700;
-  transition: color 0.2s ease;
+  color: var(--color-primary);
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .text-link:hover {
-  color: #5a3d20;
+  color: var(--color-primary-hover);
   text-decoration: underline;
 }
 
 /* === Page Buttons === */
+/* Primary button styles are handled globally in index.css */
 .page .ant-btn-primary {
-  background: rgba(209, 180, 150, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 12px;
-  color: #3d2e1e;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(90, 70, 50, 0.15);
-  transition: all 0.3s ease;
+  font-weight: 500;
+  height: auto;
+  padding: 8px 20px;
 }
 
 .page .ant-btn-primary:hover {
-  background: rgba(209, 180, 150, 0.9);
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #3d2e1e;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(90, 70, 50, 0.2);
+  background: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  color: #ffffff;
 }
 
 .page .ant-btn-default {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
   border-radius: 12px;
-  color: #4b3b2a;
+  color: var(--color-text-main);
   font-weight: 500;
   transition: all 0.3s ease;
+  height: auto;
+  padding: 8px 20px;
 }
 
 .page .ant-btn-default:hover {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #3d2e1e;
+  background: #f9f9f9;
+  border-color: #e0e0e0;
+  color: var(--color-primary);
 }
 
 /* === Empty State === */
 .page .ant-empty {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--color-border-glass);
   border-radius: 16px;
   padding: 2rem;
 }
 
 .page .ant-empty-description {
-  color: #7d6b5a;
+  color: var(--color-text-tertiary);
 }
 
 .page .ant-empty-image svg {
-  fill: #c4a88a;
+  fill: #dddddd;
 }
 
 .home-split {
@@ -148,14 +147,15 @@
   display: flex;
   min-height: 100%;
   background: transparent;
+  gap: 0 !important;
 }
 
 .home-sider {
-  background: rgba(233, 200, 177, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-bg-surface);
   border-right: none;
   box-shadow: none;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 
 .home-sider-body {
@@ -165,20 +165,19 @@
 }
 
 .topic-ref-item {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
   border-radius: 12px;
   padding: 10px 14px;
   transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .topic-ref-item:hover {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 16px rgba(101, 80, 60, 0.1);
-  transform: translateY(-1px);
+  background: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .home-content {
@@ -206,25 +205,22 @@
 /* === PDF Viewer Glassmorphism === */
 .pdf-card {
   width: 100%;
-  background: rgba(233, 200, 177, 0.85) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: #ffffff !important;
+  border: none !important;
   border-left: none !important;
-  border-radius: 16px !important;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  box-shadow: 0 8px 32px rgba(101, 80, 60, 0.12);
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
 }
 
 .pdf-card .ant-card-head {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid var(--color-border-light);
   padding: 12px 20px;
 }
 
 .pdf-card .ant-card-head-title {
-  color: #3d2e1e;
+  color: var(--color-text-main);
   font-weight: 600;
   font-size: 1rem;
 }
@@ -238,77 +234,84 @@
 }
 
 .pdf-toolbar {
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
   border-radius: 12px;
   padding: 12px 16px;
-  box-shadow: 0 4px 16px rgba(101, 80, 60, 0.06);
+  box-shadow: var(--shadow-sm);
 }
 
 .pdf-toolbar .ant-btn {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid #e0e0e0;
   border-radius: 10px;
-  color: #4b3b2a;
+  color: var(--color-text-main);
   font-weight: 500;
   transition: all 0.25s ease;
 }
 
 .pdf-toolbar .ant-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.7);
-  color: #3d2e1e;
+  background: #fdfdfd;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(101, 80, 60, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .pdf-toolbar .ant-btn:disabled {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #9d8b7a;
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #aaaaaa;
 }
 
+.nav .ant-menu-item:hover {
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: var(--color-text-main) !important;
+}
+
+.nav .ant-menu-item-selected {
+  background: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* Toolbar primary button styles handled globally */
 .pdf-toolbar .ant-btn-primary {
-  background: rgba(209, 180, 150, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #3d2e1e;
+  border: none;
   font-weight: 600;
 }
 
 .pdf-toolbar .ant-btn-primary:hover:not(:disabled) {
-  background: rgba(209, 180, 150, 0.9);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: var(--color-primary);
+  border-color: transparent;
 }
 
 .pdf-toolbar .ant-typography {
-  color: #4b3b2a;
+  color: var(--color-text-main);
   font-weight: 500;
 }
 
 .pdf-toolbar .ant-input-number {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
 }
 
 .pdf-toolbar .ant-input-number:hover,
 .pdf-toolbar .ant-input-number:focus-within {
-  border-color: rgba(209, 180, 150, 0.8);
+  border-color: var(--color-primary);
 }
 
 .pdf-toolbar .ant-input-number-input {
-  color: #3d2e1e;
+  color: var(--color-text-main);
 }
 
 .pdf-container {
   position: relative;
   width: 100%;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: #fafafa;
+  border: 1px solid #f0f0f0 !important;
   border-radius: 12px !important;
-  box-shadow: inset 0 2px 8px rgba(101, 80, 60, 0.04);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .pdf-page-wrap {
@@ -319,11 +322,11 @@
 .selection-menu {
   position: absolute;
   transform: translate(-50%, -120%);
-  background: #0f172a;
+  background: #000000;
   color: #ffffff;
   padding: 6px 8px;
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   gap: 6px;
   align-items: center;
@@ -332,35 +335,41 @@
 
 .selection-menu .ant-btn {
   box-shadow: none;
+  background: transparent;
+  color: #ffffff;
+  border: none;
+}
+.selection-menu .ant-btn:hover {
+  background: rgba(255,255,255,0.2);
 }
 
 .pdf-highlight {
   position: absolute;
-  background: rgba(252, 211, 77, 0.45);
+  background: rgba(255, 0, 115, 0.3);
   border-radius: 4px;
   pointer-events: auto;
-  box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.6);
+  box-shadow: 0 0 0 1px rgba(255, 0, 115, 0.5);
   z-index: 20;
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pdf-highlight:hover {
-  background: rgba(252, 211, 77, 0.6);
-  box-shadow: 0 0 0 2px rgba(252, 211, 77, 0.8);
+  background: rgba(255, 0, 115, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 0, 115, 0.8);
 }
 
 .pdf-highlight-draft {
-  background: rgba(252, 200, 80, 0.2);
-  box-shadow: 0 0 0 2px rgba(252, 200, 80, 0.5);
+  background: rgba(255, 0, 115, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 0, 115, 0.4);
   border-radius: 6px;
   pointer-events: none;
 }
 
 .pdf-container canvas {
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(101, 80, 60, 0.08);
+  box-shadow: var(--shadow-lg);
 }
 
 .topic-flow-card {

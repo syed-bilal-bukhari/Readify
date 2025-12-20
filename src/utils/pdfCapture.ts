@@ -85,6 +85,9 @@ export const capturePageAsImage = async ({
       <html>
       <head>
         <title>Captured Page ${currentPage} - ${sourceName ?? "PDF"}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <style>
           body {
             margin: 0;
@@ -94,7 +97,7 @@ export const capturePageAsImage = async ({
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Poppins', sans-serif;
           }
           .container {
             text-align: center;

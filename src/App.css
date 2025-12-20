@@ -154,8 +154,8 @@
   background: rgba(233, 200, 177, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 4px 0 20px rgba(101, 80, 60, 0.08);
+  border-right: none;
+  box-shadow: none;
 }
 
 .home-sider-body {
@@ -188,7 +188,6 @@
 
 .home-content-inner {
   width: 100%;
-  padding-left: 16px;
 }
 
 .home-viewer {
@@ -211,7 +210,10 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-left: none !important;
   border-radius: 16px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
   box-shadow: 0 8px 32px rgba(101, 80, 60, 0.12);
 }
 

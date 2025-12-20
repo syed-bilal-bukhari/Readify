@@ -7,7 +7,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   overflow: hidden;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: inherit;
 }
 
 .pdf-carousel-loading {

@@ -30,10 +30,10 @@
 }
 
 .library-search .ant-input-affix-wrapper {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 14px;
   padding: 12px 18px;
   transition: all 0.3s ease;
@@ -41,23 +41,23 @@
 
 .library-search .ant-input-affix-wrapper:hover,
 .library-search .ant-input-affix-wrapper:focus-within {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(209, 180, 150, 0.6);
-  box-shadow: 0 8px 24px rgba(101, 80, 60, 0.1);
+  background: #ffffff;
+  border-color: #FF0073;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Neutral soft shadow */
 }
 
 .library-search .ant-input {
   background: transparent;
   font-size: 1rem;
-  color: #3d2e1e;
+  color: #111111;
 }
 
 .library-search .ant-input::placeholder {
-  color: #9d8b7a;
+  color: #666666;
 }
 
 .library-search .ant-input-prefix {
-  color: #7d6b5a;
+  color: #666666;
   margin-right: 12px;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .library-stats-text {
-  color: #7d6b5a;
+  color: #666666;
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -85,10 +85,10 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,16 +96,16 @@
 }
 
 .library-card:hover {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(209, 180, 150, 0.5);
+  background: #ffffff;
+  border-color: #FF0073;
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(101, 80, 60, 0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
 }
 
 .library-card:focus {
   outline: none;
-  border-color: rgba(209, 180, 150, 0.7);
-  box-shadow: 0 0 0 3px rgba(209, 180, 150, 0.3);
+  border-color: #FF0073;
+  box-shadow: 0 0 0 3px rgba(255, 0, 115, 0.2);
 }
 
 .library-card:active {
@@ -132,29 +132,20 @@
   justify-content: center;
   width: 56px;
   height: 56px;
-  background: linear-gradient(
-    135deg,
-    rgba(209, 180, 150, 0.6) 0%,
-    rgba(180, 140, 100, 0.7) 100%
-  );
+  background: rgba(255, 0, 115, 0.08); /* Pink tint */
   border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(101, 80, 60, 0.15);
+  box-shadow: none;
   transition: all 0.35s ease;
 }
 
 .library-card:hover .library-card-icon {
-  background: linear-gradient(
-    135deg,
-    rgba(209, 180, 150, 0.8) 0%,
-    rgba(180, 140, 100, 0.9) 100%
-  );
+  background: rgba(255, 0, 115, 0.15);
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(101, 80, 60, 0.2);
 }
 
 .library-card-icon .anticon {
   font-size: 1.75rem;
-  color: #5a3d20;
+  color: #FF0073;
 }
 
 /* === Card Content === */
@@ -169,13 +160,13 @@
 .library-card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #3d2e1e;
+  color: #111111;
   line-height: 1.4;
 }
 
 .library-card-path {
   font-size: 0.8rem;
-  color: #7d6b5a;
+  color: #666666;
 }
 
 /* === Card Actions === */
@@ -192,7 +183,7 @@
 }
 
 .library-card-delete {
-  color: #9d8b7a;
+  color: #666666;
   transition: all 0.2s ease;
 }
 
@@ -214,7 +205,7 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 0%,
-    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 0, 115, 0.08) 0%,
     transparent 70%
   );
 }
@@ -225,7 +216,7 @@
 
 /* === Empty State === */
 .library-empty-text {
-  color: #7d6b5a;
+  color: #666666;
   font-size: 1rem;
 }
 
@@ -273,4 +264,3 @@
     font-size: 0.95rem;
   }
 }
-

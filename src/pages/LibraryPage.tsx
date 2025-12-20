@@ -1,19 +1,19 @@
 import {
-  DeleteOutlined,
-  FileAddOutlined,
-  FilePdfFilled,
-  SearchOutlined,
+    DeleteOutlined,
+    FileAddOutlined,
+    FilePdfFilled,
+    SearchOutlined,
 } from "@ant-design/icons";
 import {
-  Alert,
-  Button,
-  Empty,
-  Input,
-  Modal,
-  Skeleton,
-  Tooltip,
-  Typography,
-  message,
+    Alert,
+    Button,
+    Empty,
+    Input,
+    Modal,
+    Skeleton,
+    Tooltip,
+    Typography,
+    message,
 } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -248,7 +248,7 @@ function LibraryPage() {
           Are you sure you want to remove{" "}
           <strong>"{pdfToDelete?.title}"</strong> from your library?
         </p>
-        <p style={{ color: "#7d6b5a", fontSize: "0.9rem" }}>
+        <p style={{ color: "#666666", fontSize: "0.9rem" }}>
           This will also remove all highlights associated with this document.
         </p>
       </Modal>

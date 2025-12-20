@@ -151,11 +151,36 @@
 }
 
 .home-sider {
-  background: var(--color-bg-surface);
-  border-right: none;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: none !important;
   box-shadow: none;
   border-radius: 0 !important;
   margin: 0 !important;
+}
+
+.home-sider .ant-layout-sider-children {
+  background: transparent !important;
+}
+
+.home-sider .ant-collapse {
+  background: transparent !important;
+}
+
+.home-sider .ant-collapse-header {
+  background: transparent !important; 
+  color: var(--color-text-main) !important;
+  border-bottom: none !important;
+}
+
+.home-sider .ant-collapse-content {
+  background: transparent !important;
+  border-top: none !important;
+}
+
+.home-sider .ant-collapse-item {
+  border-bottom: none !important;
 }
 
 .home-sider-body {

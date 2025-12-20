@@ -1,19 +1,19 @@
 import {
-    DeleteOutlined,
-    FileAddOutlined,
-    FilePdfFilled,
-    SearchOutlined,
+  DeleteOutlined,
+  FileAddOutlined,
+  FilePdfFilled,
+  SearchOutlined,
 } from "@ant-design/icons";
 import {
-    Alert,
-    Button,
-    Empty,
-    Input,
-    Modal,
-    Skeleton,
-    Tooltip,
-    Typography,
-    message,
+  Alert,
+  Button,
+  Empty,
+  Input,
+  Modal,
+  Skeleton,
+  Tooltip,
+  Typography,
+  message,
 } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +64,7 @@ function LibraryPage() {
 
   const handleOpenPdf = async (pdf: PdfRecord) => {
     await setSelectedPdfById(pdf.id);
-    navigate(ROUTES.home);
+    navigate(ROUTES.research);
   };
 
   const handleDeleteClick = (e: React.MouseEvent, pdf: PdfRecord) => {
@@ -89,7 +89,7 @@ function LibraryPage() {
 
   const handleAddPdf = () => {
     // Navigate to home where user can add PDFs
-    navigate(ROUTES.home);
+    navigate(ROUTES.research);
   };
 
   return (
@@ -168,7 +168,11 @@ function LibraryPage() {
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         >
           {!searchQuery && (
-            <Button type="primary" icon={<FileAddOutlined />} onClick={handleAddPdf}>
+            <Button
+              type="primary"
+              icon={<FileAddOutlined />}
+              onClick={handleAddPdf}
+            >
               Add Your First PDF
             </Button>
           )}
@@ -177,7 +181,8 @@ function LibraryPage() {
         <>
           <div className="library-stats">
             <Typography.Text className="library-stats-text">
-              {filteredPdfs.length} {filteredPdfs.length === 1 ? "document" : "documents"}
+              {filteredPdfs.length}{" "}
+              {filteredPdfs.length === 1 ? "document" : "documents"}
               {searchQuery && ` found`}
             </Typography.Text>
           </div>

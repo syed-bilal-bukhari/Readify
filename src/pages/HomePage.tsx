@@ -1,57 +1,83 @@
-import { Layout } from "antd";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import GlobalSidebar from "../components/GlobalSidebar";
-import PdfSample from "../components/PdfSample";
-import { useApp } from "../context/AppContext";
-
-const { Sider, Content } = Layout;
+import { Link } from "react-router-dom";
+import homeBanner from "../assets/home_banner.png";
+import iconHierarchy from "../assets/icon-hierarchy.svg";
+import iconInsight from "../assets/icon-insight.svg";
+import iconNavigation from "../assets/icon-navigation.svg";
+import "./HomePage.css";
 
 function HomePage() {
-  const { selectedPdf, setSelectedPdfById } = useApp();
-  const [focusHighlightId, setFocusHighlightId] = useState<string | null>(null);
-  const [focusPage, setFocusPage] = useState<number | undefined>(undefined);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const state = location.state as {
-      focusHighlightId?: string;
-      focusPage?: number;
-      focusPdfId?: string;
-    } | null;
-    if (state?.focusHighlightId) {
-      setFocusHighlightId(state.focusHighlightId);
-      setFocusPage(state.focusPage);
-      if (state.focusPdfId) {
-        void setSelectedPdfById(state.focusPdfId);
-      }
-      navigate(location.pathname, { replace: true, state: null });
-    }
-  }, [location, navigate, setSelectedPdfById]);
-
   return (
-    <section>
-      <Layout className="home-layout">
-        <Sider
-          className="home-sider"
-          width={340}
-          theme="light"
-          collapsible={false}
-        >
-          <GlobalSidebar />
-        </Sider>
-        <Content className="home-content">
-          <div className="home-content-inner">
-            <PdfSample
-              source={selectedPdf ?? undefined}
-              focusHighlightId={focusHighlightId ?? undefined}
-              initialPage={focusPage}
+    <div className="home-container">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Stop Hunting for Highlights. <br />
+            Start Building Knowledge.
+          </h1>
+          <p className="hero-subtitle">
+            Turn scattered notes into an instantly retrievable recall engine for
+            your research.
+          </p>
+          <Link to="/research">
+            <button className="btn-primary-large">Get Started</button>
+          </Link>
+        </div>
+        <div className="hero-image-wrapper">
+          <img
+            src={homeBanner}
+            alt="Readify App Screenshot"
+            className="hero-image"
+          />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="features-section">
+        <div className="feature-item">
+          <div className="feature-icon">
+            <img
+              src={iconHierarchy}
+              width={48}
+              height={48}
+              alt="Hierarchy Icon"
             />
           </div>
-        </Content>
-      </Layout>
-    </section>
+          <h3 className="feature-title">Hierarchical Order</h3>
+          <p className="feature-description">
+            Hierarchical order from raw sources to polished notes, keeping your
+            research structured.
+          </p>
+        </div>
+
+        <div className="feature-item">
+          <div className="feature-icon">
+            <img
+              src={iconNavigation}
+              width={48}
+              height={48}
+              alt="Navigation Icon"
+            />
+          </div>
+          <h3 className="feature-title">Instant Navigation</h3>
+          <p className="feature-description">
+            Instant navigation focuses on easily recalling research with just a
+            click.
+          </p>
+        </div>
+
+        <div className="feature-item">
+          <div className="feature-icon">
+            <img src={iconInsight} width={48} height={48} alt="Insight Icon" />
+          </div>
+          <h3 className="feature-title">Connected Insight</h3>
+          <p className="feature-description">
+            Connected Insight with meaningful designations and enhancements for
+            your workflow.
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }
 

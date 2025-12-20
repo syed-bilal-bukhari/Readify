@@ -1,10 +1,9 @@
-/* Container: The main brown "widget" background */
+/* Container: Transparent glass */
 .pdf-carousel-card {
-  background: linear-gradient(135deg, #e6d0b3 0%, #d1b496 100%);
+  background: transparent;
   border-radius: 24px;
   padding: 24px 0 20px;
-  box-shadow: 0 20px 40px rgba(101, 80, 60, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: none;
   overflow: hidden;
   position: relative;
   font-family: inherit;
@@ -44,18 +43,18 @@
 /* --- The Slide (Card) Styles --- */
 .pdf-slide {
   position: relative;
-  height: 200px; /* Slightly shorter to fit nicely */
-  width: 90%; /* Take up most of the 'center' slot width */
-  max-width: 240px; /* Cap width so it doesn't get huge */
+  height: 200px;
+  width: 90%;
+  max-width: 240px;
 
   border-radius: 20px;
   padding: 16px;
 
   /* Glassmorphism Card Style */
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
   /* Layout */
   display: flex;
@@ -64,38 +63,38 @@
 
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 
   /* Text Colors */
-  color: #4b3b2a;
+  color: #111;
 }
 
 /* --- 3D / Coverflow States --- */
 
 /* 1. Active (Center) Card */
 .pdf-slide.is-active {
-  transform: scale(1.1); /* Pop out more */
+  transform: scale(1.1); 
   opacity: 1;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 24px 48px rgba(90, 70, 50, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.2); 
+  box-shadow: 0 12px 32px rgba(255, 0, 115, 0.15),
+    0 0 0 1px rgba(255, 0, 115, 0.3);
 }
 
 /* 2. Adjacent (Side) Cards & Distant Cards */
-/* We treat everything not active as "dimmed" */
 .pdf-slide.is-adjacent,
 .pdf-slide.is-distant {
-  transform: scale(0.85); /* Shrink neighbors */
+  transform: scale(0.85);
   opacity: 0.5;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.4);
-  filter: blur(0px); /* Optional: add blur(1px) if you want deeper depth */
+  background: rgba(255, 255, 255, 0.02);
+  filter: blur(0px);
 }
 
 /* Hover Effect on Active Card */
 .pdf-slide.is-active:hover {
   transform: scale(1.12);
+  border-color: #ff0073;
 }
 
 /* Hover Effect on Inactive Cards */
@@ -108,13 +107,9 @@
 
 .pdf-slide-preview {
   flex: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.2) 100%
-  );
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,8 +120,8 @@
 
 .pdf-slide-preview-icon {
   font-size: 42px;
-  color: #d1b496;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  color: #ff0073;
+  filter: drop-shadow(0 4px 6px rgba(255, 0, 115, 0.2));
 }
 
 .pdf-slide-preview .react-pdf__Document {
@@ -143,14 +138,14 @@
 }
 
 .pdf-slide-content {
-  text-align: center; /* Centered text looks better in this layout */
+  text-align: center;
 }
 
 .pdf-slide-title {
   display: block;
   font-size: 14px;
   font-weight: 700;
-  color: #3d2e1e;
+  color: #111;
   margin-bottom: 4px;
   line-height: 1.3;
 }
@@ -158,7 +153,7 @@
 .pdf-slide-path {
   display: block;
   font-size: 11px;
-  color: #7d6b5a;
+  color: #666;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,13 +166,13 @@
   right: 10px;
   width: 28px;
   height: 28px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: #d1b496;
+  color: #ff0073;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -189,9 +184,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #4b3b2a;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #111;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,11 +194,12 @@
   z-index: 20;
   transition: all 0.2s ease;
   backdrop-filter: blur(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .pdf-carousel-arrow:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.4);
+  color: #ff0073;
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -229,7 +225,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(75, 59, 42, 0.2);
+  background: rgba(0, 0, 0, 0.1);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -237,7 +233,7 @@
 }
 
 .pdf-dot.active {
-  background: #4b3b2a;
+  background: #ff0073;
   width: 24px;
   border-radius: 12px;
 }

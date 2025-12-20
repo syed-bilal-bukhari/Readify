@@ -224,14 +224,6 @@ function PdfSample({
     [activeSource?.id, activeSource?.url]
   );
 
-  const docTitle = useMemo(
-    () =>
-      `${activeSource?.name ?? "No PDF selected"} ${
-        numPages ? `(${numPages} page${numPages > 1 ? "s" : ""})` : ""
-      }`,
-    [activeSource?.name, numPages]
-  );
-
   const handlePageMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!drawMode || !pageRef.current) return;
     const pageRect = pageRef.current.getBoundingClientRect();

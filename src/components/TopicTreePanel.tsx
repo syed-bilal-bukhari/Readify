@@ -1,31 +1,31 @@
 import {
-    Button,
-    Card,
-    Form,
-    Input,
-    Modal,
-    Select,
-    Space,
-    Typography,
-    message,
+  Button,
+  Card,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Typography,
+  message,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import ReactFlow, {
-    Background,
-    Controls,
-    Handle,
-    Position,
-    ReactFlowProvider,
-    type Edge,
-    type Node,
-    type NodeProps,
+  Background,
+  Controls,
+  Handle,
+  Position,
+  ReactFlowProvider,
+  type Edge,
+  type Node,
+  type NodeProps,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
-    addTopic,
-    getTopics,
-    moveTopic,
-    renameTopic,
+  addTopic,
+  getTopics,
+  moveTopic,
+  renameTopic,
 } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import { buildTopicGraph } from "../utils/topics/graph";
@@ -330,7 +330,7 @@ function TopicTreePanel({
               proOptions={{ hideAttribution: true }}
               onNodeClick={(_, node) => onNodeClick?.(node.id)}
             >
-              <Background gap={24} />
+              <Background gap={7} />
               <Controls />
             </ReactFlow>
           </ReactFlowProvider>

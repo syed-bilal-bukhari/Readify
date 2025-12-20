@@ -2,6 +2,7 @@ import { Collapse } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { ROUTES } from "../utils/routes";
 import PdfListSidebar from "./PdfListSidebar";
 import SearchByTopicPanel from "./SearchByTopicPanel";
 import TopicTreePanel from "./TopicTreePanel";
@@ -17,7 +18,7 @@ function GlobalSidebar() {
     page?: number;
   }) => {
     void setSelectedPdfById(payload.pdfId);
-    navigate("/", {
+    navigate(ROUTES.research, {
       state: {
         focusHighlightId: payload.highlightId,
         focusPage: payload.page,

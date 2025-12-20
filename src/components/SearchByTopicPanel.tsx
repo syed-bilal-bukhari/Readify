@@ -145,7 +145,7 @@ function SearchByTopicPanel({
       if (onOpenReference) {
         onOpenReference(payload);
       } else {
-        navigate("/", {
+        navigate("/research", {
           state: {
             focusHighlightId: payload.highlightId,
             focusPage: payload.page,

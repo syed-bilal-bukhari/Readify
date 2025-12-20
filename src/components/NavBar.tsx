@@ -11,7 +11,7 @@ import "./Layout.css";
 const { Header } = AntLayout;
 
 const links = [
-  { to: ROUTES.home, label: "Home" },
+  { to: ROUTES.research, label: "Research" },
   { to: ROUTES.library, label: "Library" },
   { to: ROUTES.topics, label: "Topics" },
 ];
@@ -77,11 +77,13 @@ function NavBar() {
   return (
     <Header className="app-header">
       <div className="brand">
-        <img
-          src={logoPng}
-          alt={appName}
-          style={{ height: "60px", objectFit: "contain" }}
-        />
+        <Link to="/">
+          <img
+            src={logoPng}
+            alt={appName}
+            style={{ height: "60px", objectFit: "contain", cursor: "pointer" }}
+          />
+        </Link>
       </div>
       <Menu
         mode="horizontal"

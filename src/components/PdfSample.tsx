@@ -22,6 +22,7 @@ import {
 } from "../utils/db/highlights";
 import { getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
+import { capturePageAsImage } from "../utils/pdfCapture";
 import HighlightDetailsModal from "./HighlightDetailsModal";
 import HighlightMetadataModal from "./HighlightMetadataModal";
 
@@ -350,8 +351,29 @@ function PdfSample({
     }
   };
 
-  const downloadPlaceholder = () => {
-    message.info("Download is not available yet.");
+  const handleCapture = async () => {
+    message.loading({ content: "Capturing page...", key: "capture" });
+
+    const result = await capturePageAsImage({
+      pageRef,
+      highlights,
+      currentPage,
+      zoom,
+      scaledPageWidth,
+      sourceName: source?.name,
+    });
+
+    if (result.success) {
+      message.success({
+        content: "Page captured successfully!",
+        key: "capture",
+      });
+    } else {
+      message.error({
+        content: result.error ?? "Failed to capture page",
+        key: "capture",
+      });
+    }
   };
 
   const scaledPageWidth = BASE_PAGE_WIDTH * zoom;
@@ -425,7 +447,7 @@ function PdfSample({
               }}
               icon={<HighlightOutlined style={{ color: "#faad14" }} />}
             />
-            <Button onClick={downloadPlaceholder}>Download</Button>
+            <Button onClick={handleCapture}>Capture</Button>
           </Flex>
         </Flex>
         <Flex

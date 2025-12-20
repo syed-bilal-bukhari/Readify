@@ -1,14 +1,14 @@
 import { HighlightOutlined } from "@ant-design/icons";
 import {
-    Button,
-    Card,
-    Flex,
-    Form,
-    InputNumber,
-    Select,
-    Space,
-    Typography,
-    message,
+  Button,
+  Card,
+  Flex,
+  Form,
+  InputNumber,
+  Select,
+  Space,
+  Typography,
+  message,
 } from "antd";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -17,14 +17,14 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import type { Highlight } from "../types/pdfHighlight";
 import {
-    addHighlightRecord,
-    deleteHighlightRecord,
-    getHighlightsByPdf,
+  addHighlightRecord,
+  deleteHighlightRecord,
+  getHighlightsByPdf,
 } from "../utils/db/highlights";
 import {
-    readReadingDirection,
-    saveReadingDirection,
-    type ReadingDirection,
+  readReadingDirection,
+  saveReadingDirection,
+  type ReadingDirection,
 } from "../utils/db/settings";
 import { getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
@@ -465,7 +465,7 @@ function PdfSample({
   ]);
 
   return (
-    <Card title={docTitle} className="pdf-card">
+    <Card className="pdf-card">
       <Space direction="vertical" size="middle" className="pdf-space">
         {loadError ? (
           <Typography.Text type="danger">

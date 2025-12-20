@@ -9,7 +9,6 @@ function TopicsPage() {
   return (
     <section className="page">
       <p className="eyebrow">Topics</p>
-      <Typography.Title level={1}>Topic Tree</Typography.Title>
       <Typography.Paragraph>
         Manage the full topic hierarchy. Add, rename, or move nodes and explore
         the graph layout.

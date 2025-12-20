@@ -1,25 +1,22 @@
-/* === TopicTreePanel Glassmorphism Theme === */
+/* === TopicTreePanel Theme === */
 
 /* Main Card Container */
 .topic-tree-panel {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(101, 80, 60, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
 .topic-tree-panel .ant-card-head {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding: 16px 24px;
 }
 
 .topic-tree-panel .ant-card-head-title {
-  color: #3d2e1e;
+  color: #111111;
   font-weight: 700;
   font-size: 18px;
   letter-spacing: -0.3px;
@@ -31,20 +28,20 @@
 
 /* === Add Topic Button === */
 .topic-tree-panel .ant-card-extra .ant-btn-primary {
-  background: rgba(209, 180, 150, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ff0073;
+  border: 1px solid #ff0073;
   border-radius: 12px;
-  color: #3d2e1e;
+  color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(90, 70, 50, 0.15);
+  box-shadow: 0 4px 12px rgba(255, 0, 115, 0.2);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .topic-tree-panel .ant-card-extra .ant-btn-primary:hover {
-  background: rgba(209, 180, 150, 0.8);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: #d40060;
+  border-color: #d40060;
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(90, 70, 50, 0.2);
+  box-shadow: 0 8px 20px rgba(255, 0, 115, 0.3);
 }
 
 .topic-tree-panel .ant-card-extra .ant-btn-primary:active {
@@ -53,11 +50,7 @@
 
 /* === Flow Wrapper === */
 .topic-flow-wrapper {
-  background: linear-gradient(
-    135deg,
-    rgba(230, 208, 179, 0.3) 0%,
-    rgba(209, 180, 150, 0.2) 100%
-  );
+  background: #ffffff;
   border-radius: 0 0 24px 24px;
 }
 
@@ -67,30 +60,28 @@
 }
 
 .topic-tree-panel .react-flow__background pattern circle {
-  fill: rgba(125, 107, 90, 0.15);
+  fill: #e5e5e5; /* Light gray dots */
 }
 
 /* ReactFlow Controls */
 .topic-tree-panel .react-flow__controls {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
 .topic-tree-panel .react-flow__controls-button {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  color: #4b3b2a;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #111111;
   transition: all 0.2s ease;
 }
 
 .topic-tree-panel .react-flow__controls-button:hover {
-  background: rgba(209, 180, 150, 0.3);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .topic-tree-panel .react-flow__controls-button:last-child {
@@ -98,51 +89,49 @@
 }
 
 .topic-tree-panel .react-flow__controls-button svg {
-  fill: #4b3b2a;
+  fill: #111111;
 }
 
 /* ReactFlow Edges */
 .topic-tree-panel .react-flow__edge-path {
-  stroke: rgba(125, 107, 90, 0.5);
+  stroke: #b1b1b7; /* Gray edges */
   stroke-width: 2;
 }
 
 /* ReactFlow Handles */
 .topic-tree-panel .react-flow__handle {
-  background: rgba(209, 180, 150, 0.8);
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: #ff0073;
+  border: 2px solid #ffffff;
   width: 10px;
   height: 10px;
 }
 
-/* === Topic Node Card (Glass Card) === */
+/* === Topic Node Card === */
 .topic-node {
-  background: rgba(255, 255, 255, 0.25) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
   border-radius: 16px !important;
-  box-shadow: 0 8px 24px rgba(90, 70, 50, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   min-width: 160px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .topic-node:hover {
-  background: rgba(255, 255, 255, 0.4) !important;
+  background: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(90, 70, 50, 0.15);
-  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.15) !important;
 }
 
 .topic-node .ant-card-head {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding: 8px 12px;
   min-height: auto;
 }
 
 .topic-node .ant-card-head-title {
-  color: #3d2e1e;
+  color: #111111;
   font-size: 13px;
   padding: 0;
 }
@@ -153,7 +142,7 @@
 
 /* Topic Node Buttons */
 .topic-node .ant-btn-link {
-  color: #7d6b5a;
+  color: #ff0073;
   font-size: 12px;
   padding: 0 4px;
   height: auto;
@@ -161,30 +150,28 @@
 }
 
 .topic-node .ant-btn-link:hover {
-  color: #3d2e1e;
-  background: rgba(209, 180, 150, 0.2);
+  color: #d40060;
+  background: rgba(255, 0, 115, 0.05);
   border-radius: 6px;
 }
 
-/* === Modals Glassmorphism === */
+/* === Modals === */
 .topic-modal .ant-modal-content {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 24px;
-  box-shadow: 0 32px 64px rgba(90, 70, 50, 0.25);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
 .topic-modal .ant-modal-header {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding: 20px 24px;
 }
 
 .topic-modal .ant-modal-title {
-  color: #3d2e1e;
+  color: #111111;
   font-weight: 700;
   font-size: 18px;
 }
@@ -195,46 +182,44 @@
 
 .topic-modal .ant-modal-footer {
   background: transparent;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   padding: 16px 24px;
 }
 
 /* Modal Form Labels */
 .topic-modal .ant-form-item-label > label {
-  color: #4b3b2a;
+  color: #111111;
   font-weight: 600;
 }
 
 /* Modal Input Fields */
 .topic-modal .ant-input {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 12px;
-  color: #3d2e1e;
+  color: #111111;
   padding: 10px 14px;
   transition: all 0.3s ease;
 }
 
 .topic-modal .ant-input:hover {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(209, 180, 150, 0.5);
+  border-color: #ff0073;
 }
 
 .topic-modal .ant-input:focus {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(209, 180, 150, 0.8);
-  box-shadow: 0 0 0 3px rgba(209, 180, 150, 0.2);
+  border-color: #ff0073;
+  box-shadow: 0 0 0 3px rgba(255, 0, 115, 0.1);
 }
 
 .topic-modal .ant-input::placeholder {
-  color: #7d6b5a;
-  opacity: 0.7;
+  color: #999999;
+  opacity: 1;
 }
 
 /* Modal Select */
 .topic-modal .ant-select-selector {
-  background: rgba(255, 255, 255, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
   border-radius: 12px !important;
   min-height: 42px !important;
   padding: 4px 14px !important;
@@ -242,65 +227,59 @@
 }
 
 .topic-modal .ant-select-selector:hover {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border-color: rgba(209, 180, 150, 0.5) !important;
+  border-color: #ff0073 !important;
 }
 
 .topic-modal .ant-select-focused .ant-select-selector {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-color: rgba(209, 180, 150, 0.8) !important;
-  box-shadow: 0 0 0 3px rgba(209, 180, 150, 0.2) !important;
+  border-color: #ff0073 !important;
+  box-shadow: 0 0 0 3px rgba(255, 0, 115, 0.1) !important;
 }
 
 .topic-modal .ant-select-selection-placeholder {
-  color: #7d6b5a !important;
-  opacity: 0.7;
+  color: #999999 !important;
 }
 
 .topic-modal .ant-select-selection-item {
-  color: #3d2e1e;
+  color: #111111;
 }
 
 /* Modal Buttons */
 .topic-modal .ant-btn-default {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-  color: #4b3b2a;
+  color: #111111;
   transition: all 0.2s ease;
 }
 
 .topic-modal .ant-btn-default:hover {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(209, 180, 150, 0.5);
-  color: #3d2e1e;
+  border-color: #ff0073;
+  color: #ff0073;
 }
 
 .topic-modal .ant-btn-primary {
-  background: rgba(209, 180, 150, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #ff0073;
+  border: 1px solid #ff0073;
   border-radius: 10px;
-  color: #3d2e1e;
+  color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(90, 70, 50, 0.15);
+  box-shadow: 0 4px 12px rgba(255, 0, 115, 0.2);
   transition: all 0.2s ease;
 }
 
 .topic-modal .ant-btn-primary:hover {
-  background: rgba(209, 180, 150, 0.9);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: #d40060;
+  border-color: #d40060;
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(90, 70, 50, 0.2);
+  box-shadow: 0 8px 20px rgba(255, 0, 115, 0.3);
 }
 
 /* Modal Select Dropdown */
 .topic-modal-dropdown {
-  background: rgba(255, 255, 255, 0.9) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px !important;
-  box-shadow: 0 16px 40px rgba(90, 70, 50, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
   padding: 8px !important;
 }
 
@@ -308,17 +287,18 @@
   border-radius: 8px;
   padding: 10px 14px;
   margin: 2px 0;
-  color: #3d2e1e;
+  color: #111111;
   transition: all 0.2s ease;
 }
 
 .topic-modal-dropdown .ant-select-item-option-active {
-  background: rgba(209, 180, 150, 0.3) !important;
+  background: rgba(255, 0, 115, 0.05) !important;
 }
 
 .topic-modal-dropdown .ant-select-item-option-selected {
-  background: rgba(209, 180, 150, 0.5) !important;
+  background: rgba(255, 0, 115, 0.1) !important;
   font-weight: 600;
+  color: #ff0073;
 }
 
 /* Loading State */
@@ -326,7 +306,7 @@
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.1) 25%,
-    rgba(255, 255, 255, 0.3) 50%,
+    rgba(0, 0, 0, 0.05) 50%,
     rgba(255, 255, 255, 0.1) 75%
   );
 }

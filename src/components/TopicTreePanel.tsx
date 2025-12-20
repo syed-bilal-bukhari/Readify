@@ -1,31 +1,31 @@
 import {
-  Button,
-  Card,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Space,
-  Typography,
-  message,
+    Button,
+    Card,
+    Form,
+    Input,
+    Modal,
+    Select,
+    Space,
+    Typography,
+    message,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import ReactFlow, {
-  Background,
-  Controls,
-  Handle,
-  Position,
-  ReactFlowProvider,
-  type Edge,
-  type Node,
-  type NodeProps,
+    Background,
+    Controls,
+    Handle,
+    Position,
+    ReactFlowProvider,
+    type Edge,
+    type Node,
+    type NodeProps,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
-  addTopic,
-  getTopics,
-  moveTopic,
-  renameTopic,
+    addTopic,
+    getTopics,
+    moveTopic,
+    renameTopic,
 } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import { buildTopicGraph } from "../utils/topics/graph";
@@ -102,7 +102,7 @@ function TopicNode({ data }: NodeProps<TopicNodeData>) {
       style={
         isFocused
           ? {
-              boxShadow: "0 0 0 2px #2563eb, 0 0 12px rgba(37,99,235,0.35)",
+              boxShadow: "0 0 0 2px #FF0073, 0 0 12px rgba(255,0,115,0.35)",
             }
           : undefined
       }

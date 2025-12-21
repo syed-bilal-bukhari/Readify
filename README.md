@@ -1,73 +1,19 @@
-# React + TypeScript + Vite
+# Stop Hunting for Highlights. Start Building Knowledge.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Readify is a research tool designed to function as a "recall engine" that transforms scattered highlights into a structured, instantly retrievable knowledge base.**
 
-Currently, two official plugins are available:
+When you’re juggling dozens of books, articles, and notes, the hardest part isn’t reading, it’s finding the one reference that moves your work forward. Readify ends the chaos of screenshots and messy citations by turning every highlight into a reliable, retrievable reference.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+🛑 The Problem
+Every serious researcher faces the same bottleneck: knowing more than you can reliably recall and retrieve.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Messy references: Scattered notes, screenshots, and bookmarks never line up when deadlines hit.
+- Relevance lost: You know you’ve seen a specific passage, but can’t find it in time to push your work forward.
+- Momentum killers: Context switching, manual scanning, and re-reading sap hours and confidence.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+⚡ The Solution
+Readify makes your reading actionable. Highlight once, and you get:
+- Hierarchical Order: Arrange references in an infinite-depth topic tree that mirrors how you think.
+- Instant Navigation: Focus on easily recalling research with just a click.
+- Connected Insight: See how ideas connect across authors, chapters, and volumes with meaningful designations.

@@ -8,6 +8,7 @@ type HighlightMetadataModalProps = {
   currentPage: number;
   topics: TopicRecord[];
   pdfId?: string;
+  isEditing?: boolean;
   onOk: () => void;
   onCancel: () => void;
 };
@@ -18,15 +19,16 @@ const HighlightMetadataModal = ({
   currentPage,
   topics,
   pdfId,
+  isEditing = false,
   onOk,
   onCancel,
 }: HighlightMetadataModalProps) => (
   <Modal
-    title="Save Highlight Metadata"
+    title={isEditing ? "Edit Highlight Metadata" : "Save Highlight Metadata"}
     open={open}
     onOk={onOk}
     onCancel={onCancel}
-    okText="Save"
+    okText={isEditing ? "Update" : "Save"}
     cancelText="Cancel"
     destroyOnClose
   >

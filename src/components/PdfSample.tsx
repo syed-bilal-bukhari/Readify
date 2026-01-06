@@ -20,6 +20,7 @@ import {
   addHighlightRecord,
   deleteHighlightRecord,
   getHighlightsByPdf,
+  updateHighlightRecord,
 } from "../utils/db/highlights";
 import {
   readReadingDirection,
@@ -60,6 +61,9 @@ function PdfSample({
   const [drawMode, setDrawMode] = useState(true);
   const [draftBox, setDraftBox] = useState<Highlight | null>(null);
   const [pendingBox, setPendingBox] = useState<Highlight | null>(null);
+  const [editingHighlight, setEditingHighlight] = useState<Highlight | null>(
+    null
+  );
   const [loadError, setLoadError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -283,40 +287,67 @@ function PdfSample({
   const handleCancelMetadata = () => {
     setMetadataModalOpen(false);
     setPendingBox(null);
+    setEditingHighlight(null);
   };
 
   const handleSaveMetadata = async () => {
-    if (!pendingBox || !source?.id) {
-      message.error("Missing highlight or PDF context.");
+    if (!source?.id) {
+      message.error("Missing PDF context.");
       return;
     }
+
+    // Check if we're editing or creating
+    const isEditing = !!editingHighlight;
+    const boxData = isEditing ? editingHighlight : pendingBox;
+
+    if (!boxData) {
+      message.error("Missing highlight data.");
+      return;
+    }
+
     try {
       const values = await metaForm.validateFields();
       const tags = (values.tags as string)
         .split(",")
         .map((t) => t.trim())
         .filter(Boolean);
-      const id = `box-${Date.now()}`;
+
       const record = {
-        id,
+        id: isEditing ? editingHighlight.id : `box-${Date.now()}`,
         pdfId: source.id,
         page: values.page,
-        top: pendingBox.top,
-        left: pendingBox.left,
-        width: pendingBox.width,
-        height: pendingBox.height,
+        top: boxData.top,
+        left: boxData.left,
+        width: boxData.width,
+        height: boxData.height,
         topicIds: (values.topicIds as string[]) ?? [],
         book: values.book as string,
         volume: values.volume as string,
         chapter: values.chapter as string,
         tags,
         description: (values.description as string) || undefined,
-        createdAt: Date.now(),
+        createdAt: isEditing
+          ? editingHighlight.createdAt ?? Date.now()
+          : Date.now(),
       };
-      setHighlights((prev) => [...prev, record]);
-      await addHighlightRecord(record);
+
+      if (isEditing) {
+        // Update existing highlight
+        setHighlights((prev) =>
+          prev.map((hl) => (hl.id === record.id ? record : hl))
+        );
+        await updateHighlightRecord(record);
+        message.success("Highlight updated.");
+      } else {
+        // Create new highlight
+        setHighlights((prev) => [...prev, record]);
+        await addHighlightRecord(record);
+        message.success("Highlight saved.");
+      }
+
       setMetadataModalOpen(false);
       setPendingBox(null);
+      setEditingHighlight(null);
       metaForm.resetFields();
     } catch (err) {
       if (err instanceof Error) {
@@ -337,6 +368,25 @@ function PdfSample({
   };
   const goPrevPage = () => {
     setCurrentPage((p) => clampPage(p - 1));
+  };
+
+  const handleEditHighlight = () => {
+    if (!selectedHighlight) return;
+
+    // Pre-populate form with existing highlight data
+    metaForm.setFieldsValue({
+      topicIds: selectedHighlight.topicIds ?? [],
+      book: selectedHighlight.book ?? "",
+      volume: selectedHighlight.volume ?? "",
+      chapter: selectedHighlight.chapter ?? "",
+      page: selectedHighlight.page,
+      tags: selectedHighlight.tags?.join(", ") ?? "",
+      description: selectedHighlight.description ?? "",
+    });
+
+    setEditingHighlight(selectedHighlight);
+    setViewModalOpen(false);
+    setMetadataModalOpen(true);
   };
 
   const handleClearSelectedHighlight = async () => {
@@ -644,6 +694,7 @@ function PdfSample({
         currentPage={currentPage}
         topics={topics}
         pdfId={source?.id}
+        isEditing={!!editingHighlight}
       />
 
       <HighlightDetailsModal
@@ -654,6 +705,7 @@ function PdfSample({
         }}
         highlight={selectedHighlight}
         topicNameMap={topicNameMap}
+        onEdit={handleEditHighlight}
         onClear={handleClearSelectedHighlight}
       />
     </Card>

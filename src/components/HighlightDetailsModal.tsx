@@ -7,6 +7,7 @@ type HighlightDetailsModalProps = {
   onClose: () => void;
   topicNameMap: Map<string, string>;
   onClear: () => void;
+  onEdit: () => void;
 };
 
 const HighlightDetailsModal = ({
@@ -15,6 +16,7 @@ const HighlightDetailsModal = ({
   onClose,
   topicNameMap,
   onClear,
+  onEdit,
 }: HighlightDetailsModalProps) => (
   <Modal
     title="Highlight Details"
@@ -23,6 +25,9 @@ const HighlightDetailsModal = ({
     footer={[
       <Button key="close" onClick={onClose}>
         Close
+      </Button>,
+      <Button key="edit" type="primary" onClick={onEdit} disabled={!highlight}>
+        Edit
       </Button>,
       <Button key="clear" danger onClick={onClear} disabled={!highlight}>
         Clear Highlight
@@ -44,9 +49,7 @@ const HighlightDetailsModal = ({
         {highlight.description ? (
           <Space direction="vertical" size={4} style={{ width: "100%" }}>
             <Typography.Text strong>Description</Typography.Text>
-            <Typography.Paragraph
-              style={{ margin: 0, whiteSpace: "pre-wrap" }}
-            >
+            <Typography.Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
               {highlight.description}
             </Typography.Paragraph>
           </Space>

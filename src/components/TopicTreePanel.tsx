@@ -22,7 +22,13 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
+  deleteHighlightRecord,
+  getHighlightsByTopic,
+  updateHighlightRecord,
+} from "../utils/db/highlights";
+import {
   addTopic,
+  deleteTopic,
   getTopics,
   moveTopic,
   renameTopic,
@@ -35,6 +41,7 @@ type TopicNodeData = {
   topic: TopicRecord;
   onRename: (topic: TopicRecord) => void;
   onMove: (topic: TopicRecord) => void;
+  onDelete: (topic: TopicRecord) => void;
   isFocused?: boolean;
 };
 
@@ -92,7 +99,7 @@ function computeLayout(topics: TopicRecord[]): PositionedTopic[] {
 }
 
 function TopicNode({ data }: NodeProps<TopicNodeData>) {
-  const { topic, onMove, onRename, isFocused } = data;
+  const { topic, onMove, onRename, onDelete, isFocused } = data;
   return (
     <Card
       size="small"
@@ -130,6 +137,17 @@ function TopicNode({ data }: NodeProps<TopicNodeData>) {
         >
           Move
         </Button>
+        <Button
+          size="small"
+          type="link"
+          danger
+          onClick={(event) => {
+            event.stopPropagation();
+            onDelete(topic);
+          }}
+        >
+          Delete
+        </Button>
       </Space>
     </Card>
   );
@@ -161,8 +179,16 @@ function TopicTreePanel({
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [moveModalOpen, setMoveModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [renameTarget, setRenameTarget] = useState<TopicRecord | null>(null);
   const [moveTarget, setMoveTarget] = useState<TopicRecord | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TopicRecord | null>(null);
+  const [deleteImpact, setDeleteImpact] = useState<{
+    hasChildren: boolean;
+    childrenCount: number;
+    highlightsWithMultipleTopics: number;
+    highlightsWithOnlyThisTopic: number;
+  } | null>(null);
   const [form] = Form.useForm();
   const [renameForm] = Form.useForm();
   const [moveForm] = Form.useForm();
@@ -229,9 +255,28 @@ function TopicTreePanel({
             moveForm.setFieldsValue({ parentId: topic.parentId ?? undefined });
             setMoveModalOpen(true);
           },
+          onDelete: async (topic) => {
+            setDeleteTarget(topic);
+            // Analyze impact
+            const children = topics.filter((t) => t.parentId === topic.id);
+            const highlights = await getHighlightsByTopic(topic.id);
+            const highlightsWithMultiple = highlights.filter(
+              (h) => h.topicIds && h.topicIds.length > 1
+            ).length;
+            const highlightsWithOnlyThis = highlights.filter(
+              (h) => !h.topicIds || h.topicIds.length === 1
+            ).length;
+            setDeleteImpact({
+              hasChildren: children.length > 0,
+              childrenCount: children.length,
+              highlightsWithMultipleTopics: highlightsWithMultiple,
+              highlightsWithOnlyThisTopic: highlightsWithOnlyThis,
+            });
+            setDeleteModalOpen(true);
+          },
         },
       })),
-    [positionedNodes, renameForm, moveForm, focusTopicId]
+    [positionedNodes, renameForm, moveForm, focusTopicId, topics]
   );
 
   const edges = useMemo<Edge[]>(
@@ -300,6 +345,60 @@ function TopicTreePanel({
       const messageText =
         err instanceof Error ? err.message : "Failed to move topic";
       message.error(messageText);
+    }
+  };
+
+  const handleDeleteTopic = async () => {
+    if (!deleteTarget || !deleteImpact) return;
+
+    // Check if topic has children - block deletion
+    if (deleteImpact.hasChildren) {
+      message.error(
+        `Cannot delete topic with ${deleteImpact.childrenCount} child topic(s). Please move or delete children first.`
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Get all highlights associated with this topic
+      const highlights = await getHighlightsByTopic(deleteTarget.id);
+
+      // Process highlights
+      for (const highlight of highlights) {
+        if (!highlight.topicIds || highlight.topicIds.length <= 1) {
+          // Delete highlight if it only has this topic
+          await deleteHighlightRecord(highlight.id);
+        } else {
+          // Remove topic ID from highlight if it has multiple topics
+          const updatedTopicIds = highlight.topicIds.filter(
+            (id) => id !== deleteTarget.id
+          );
+          await updateHighlightRecord({
+            ...highlight,
+            topicIds: updatedTopicIds,
+          });
+        }
+      }
+
+      // Delete the topic itself
+      await deleteTopic(deleteTarget.id);
+
+      message.success(
+        `Topic "${deleteTarget.name}" deleted. ${deleteImpact.highlightsWithOnlyThisTopic} highlight(s) removed, ${deleteImpact.highlightsWithMultipleTopics} highlight(s) updated.`
+      );
+
+      setDeleteModalOpen(false);
+      setDeleteTarget(null);
+      setDeleteImpact(null);
+      await loadTopics();
+    } catch (err) {
+      const messageText =
+        err instanceof Error ? err.message : "Failed to delete topic";
+      message.error(messageText);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -405,6 +504,68 @@ function TopicTreePanel({
             />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title="Delete Topic"
+        open={deleteModalOpen}
+        onOk={handleDeleteTopic}
+        onCancel={() => {
+          setDeleteModalOpen(false);
+          setDeleteTarget(null);
+          setDeleteImpact(null);
+        }}
+        okText={deleteImpact?.hasChildren ? "Cannot Delete" : "Delete"}
+        okButtonProps={{
+          danger: true,
+          disabled: deleteImpact?.hasChildren,
+        }}
+        cancelText="Cancel"
+        className="topic-modal"
+      >
+        {deleteTarget && deleteImpact && (
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            <Typography.Text strong>Topic: {deleteTarget.name}</Typography.Text>
+
+            {deleteImpact.hasChildren ? (
+              <Typography.Paragraph type="danger">
+                ⚠️ Cannot delete this topic because it has{" "}
+                {deleteImpact.childrenCount} child topic(s). Please move or
+                delete the children first.
+              </Typography.Paragraph>
+            ) : (
+              <>
+                <Typography.Paragraph>
+                  This topic is a leaf node and can be deleted. Here's the
+                  impact:
+                </Typography.Paragraph>
+
+                <Space direction="vertical" size="small">
+                  <Typography.Text>
+                    <strong>Highlights still accessible:</strong>{" "}
+                    {deleteImpact.highlightsWithMultipleTopics} highlight(s)
+                    have multiple topics and will remain accessible (this topic
+                    will be removed from them).
+                  </Typography.Text>
+
+                  <Typography.Text type="danger">
+                    <strong>Highlights that will be deleted:</strong>{" "}
+                    {deleteImpact.highlightsWithOnlyThisTopic} highlight(s) only
+                    have this topic and will be permanently deleted.
+                  </Typography.Text>
+                </Space>
+
+                {deleteImpact.highlightsWithOnlyThisTopic > 0 && (
+                  <Typography.Paragraph type="danger" strong>
+                    ⚠️ Warning: {deleteImpact.highlightsWithOnlyThisTopic}{" "}
+                    highlight(s) will be permanently deleted. This action cannot
+                    be undone.
+                  </Typography.Paragraph>
+                )}
+              </>
+            )}
+          </Space>
+        )}
       </Modal>
     </>
   );

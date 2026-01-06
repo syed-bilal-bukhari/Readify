@@ -27,7 +27,7 @@ import {
   saveReadingDirection,
   type ReadingDirection,
 } from "../utils/db/settings";
-import { getTopics } from "../utils/db/topics";
+import { addTopic, getTopics } from "../utils/db/topics";
 import type { TopicRecord } from "../utils/db/types";
 import { capturePageAsImage } from "../utils/pdfCapture";
 import HighlightDetailsModal from "./HighlightDetailsModal";
@@ -204,16 +204,17 @@ function PdfSample({
 
   // focusHighlightId is retained for signature compatibility but no longer used
 
+  const loadTopics = async () => {
+    try {
+      const records = await getTopics();
+      setTopics(records);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to load topics", err);
+    }
+  };
+
   useEffect(() => {
-    const loadTopics = async () => {
-      try {
-        const records = await getTopics();
-        setTopics(records);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error("Failed to load topics", err);
-      }
-    };
     void loadTopics();
   }, []);
 
@@ -387,6 +388,21 @@ function PdfSample({
     setEditingHighlight(selectedHighlight);
     setViewModalOpen(false);
     setMetadataModalOpen(true);
+  };
+
+  const handleRefreshTopics = async () => {
+    await loadTopics();
+  };
+
+  const handleCreateTopic = async (name: string, parentId: string | null) => {
+    const id = `topic-${Date.now()}`;
+    const newTopic: TopicRecord = {
+      id,
+      name,
+      parentId,
+    };
+    await addTopic(newTopic);
+    await loadTopics();
   };
 
   const handleClearSelectedHighlight = async () => {
@@ -695,6 +711,8 @@ function PdfSample({
         topics={topics}
         pdfId={source?.id}
         isEditing={!!editingHighlight}
+        onRefreshTopics={handleRefreshTopics}
+        onCreateTopic={handleCreateTopic}
       />
 
       <HighlightDetailsModal

@@ -37,3 +37,8 @@ export async function moveTopic(
   }
   await db.put(STORE_TOPICS, { ...existing, parentId: newParentId });
 }
+
+export async function deleteTopic(id: string): Promise<void> {
+  const db = await getDb();
+  await db.delete(STORE_TOPICS, id);
+}

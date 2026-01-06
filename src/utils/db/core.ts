@@ -3,12 +3,13 @@ import { openDB, type IDBPDatabase } from "idb";
 export type PdfDb = IDBPDatabase<unknown>;
 
 export const DB_NAME = "pdfIndexDb";
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
 export const STORE_PDFS = "pdfs";
 export const STORE_META = "meta";
 export const STORE_HIGHLIGHTS = "highlights";
 export const STORE_TOPICS = "topics";
+export const STORE_BOOKMARKS = "bookmarks";
 
 export const LAST_PDF_KEY = "lastPdfId";
 
@@ -29,6 +30,12 @@ export async function getDb(): Promise<PdfDb> {
       }
       if (!db.objectStoreNames.contains(STORE_TOPICS)) {
         db.createObjectStore(STORE_TOPICS, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(STORE_BOOKMARKS)) {
+        const store = db.createObjectStore(STORE_BOOKMARKS, {
+          keyPath: "id",
+        });
+        store.createIndex("pdfId", "pdfId", { unique: false });
       }
     },
   });

@@ -1,10 +1,12 @@
-import { HighlightOutlined } from "@ant-design/icons";
+import { BookOutlined, HighlightOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
   Flex,
   Form,
+  Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   Typography,
@@ -16,6 +18,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import type { Highlight } from "../types/pdfHighlight";
+import { addBookmark } from "../utils/db/bookmarks";
 import {
   addHighlightRecord,
   deleteHighlightRecord,
@@ -79,6 +82,8 @@ function PdfSample({
   const hasNotifiedInitialPageRef = useRef(false);
   const [readingDirection, setReadingDirection] =
     useState<ReadingDirection>("ltr");
+  const [bookmarkModalOpen, setBookmarkModalOpen] = useState(false);
+  const [bookmarkTitle, setBookmarkTitle] = useState("");
 
   const topicNameMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -449,6 +454,31 @@ function PdfSample({
     }
   };
 
+  const handleSaveBookmark = async () => {
+    if (!source?.id || !bookmarkTitle.trim()) {
+      message.warning("Please enter a bookmark title");
+      return;
+    }
+
+    try {
+      const bookmark = {
+        id: `bookmark-${Date.now()}`,
+        pdfId: source.id,
+        page: currentPage,
+        title: bookmarkTitle.trim(),
+        createdAt: Date.now(),
+      };
+      await addBookmark(bookmark);
+      message.success("Bookmark added");
+      setBookmarkModalOpen(false);
+      setBookmarkTitle("");
+    } catch (err) {
+      message.error("Failed to add bookmark");
+      // eslint-disable-next-line no-console
+      console.error("Failed to add bookmark", err);
+    }
+  };
+
   const scaledPageWidth = BASE_PAGE_WIDTH * zoom;
 
   // Load and persist per-PDF reading direction
@@ -608,6 +638,15 @@ function PdfSample({
               style={{ width: 180 }}
             />
             <Button onClick={handleCapture}>Capture</Button>
+            <Button
+              icon={<BookOutlined />}
+              onClick={() => {
+                setBookmarkTitle("");
+                setBookmarkModalOpen(true);
+              }}
+            >
+              Add Bookmark
+            </Button>
           </Flex>
         </Flex>
         <Flex
@@ -726,6 +765,32 @@ function PdfSample({
         onEdit={handleEditHighlight}
         onClear={handleClearSelectedHighlight}
       />
+
+      <Modal
+        title="Add Bookmark"
+        open={bookmarkModalOpen}
+        onOk={handleSaveBookmark}
+        onCancel={() => {
+          setBookmarkModalOpen(false);
+          setBookmarkTitle("");
+        }}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+          <div>
+            <Typography.Text strong>Current Page: </Typography.Text>
+            <Typography.Text>{currentPage}</Typography.Text>
+          </div>
+          <Input
+            placeholder="Enter bookmark title"
+            value={bookmarkTitle}
+            onChange={(e) => setBookmarkTitle(e.target.value)}
+            onPressEnter={handleSaveBookmark}
+            autoFocus
+          />
+        </Space>
+      </Modal>
     </Card>
   );
 }

@@ -27,6 +27,14 @@ export type TopicRecord = {
   parentId: string | null;
 };
 
+export type BookmarkRecord = {
+  id: string;
+  pdfId: string;
+  page: number;
+  title: string;
+  createdAt: number;
+};
+
 export type PdfIndexBackup = {
   pdfs: PdfRecord[];
   lastPdfId: string | null;

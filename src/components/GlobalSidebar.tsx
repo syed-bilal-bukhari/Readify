@@ -3,12 +3,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { ROUTES } from "../utils/routes";
+import BookmarksList from "./BookmarksList";
 import PdfListSidebar from "./PdfListSidebar";
 import SearchByTopicPanel from "./SearchByTopicPanel";
 import TopicTreePanel from "./TopicTreePanel";
 
-function GlobalSidebar() {
-  const { setSelectedPdfById } = useApp();
+type GlobalSidebarProps = {
+  onNavigateToPage?: (page: number) => void;
+};
+
+function GlobalSidebar({ onNavigateToPage }: GlobalSidebarProps) {
+  const { selectedPdf, setSelectedPdfById } = useApp();
   const [focusedTopicId, setFocusedTopicId] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -38,6 +43,21 @@ function GlobalSidebar() {
             key: "pdfs",
             label: "Recent PDFs",
             children: <PdfListSidebar />,
+          },
+          {
+            key: "bookmarks",
+            label: "Bookmarks",
+            children: (
+              <BookmarksList
+                pdfId={selectedPdf?.id}
+                onNavigateToPage={
+                  onNavigateToPage ??
+                  (() => {
+                    // Default no-op if not provided
+                  })
+                }
+              />
+            ),
           },
           {
             key: "search",

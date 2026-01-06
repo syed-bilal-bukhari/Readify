@@ -11,6 +11,9 @@ function ResearchPage() {
   const { selectedPdf, setSelectedPdfById } = useApp();
   const [focusHighlightId, setFocusHighlightId] = useState<string | null>(null);
   const [focusPage, setFocusPage] = useState<number | undefined>(undefined);
+  const [bookmarkPage, setBookmarkPage] = useState<number | undefined>(
+    undefined
+  );
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -30,6 +33,11 @@ function ResearchPage() {
     }
   }, [location, navigate, setSelectedPdfById]);
 
+  const handleNavigateToBookmarkPage = (page: number) => {
+    setBookmarkPage(page);
+    setFocusPage(page);
+  };
+
   return (
     <section>
       <Layout className="home-layout">
@@ -39,14 +47,14 @@ function ResearchPage() {
           theme="light"
           collapsible={false}
         >
-          <GlobalSidebar />
+          <GlobalSidebar onNavigateToPage={handleNavigateToBookmarkPage} />
         </Sider>
         <Content className="home-content">
           <div className="home-content-inner">
             <PdfSample
               source={selectedPdf ?? undefined}
               focusHighlightId={focusHighlightId ?? undefined}
-              initialPage={focusPage}
+              initialPage={focusPage ?? bookmarkPage}
             />
           </div>
         </Content>

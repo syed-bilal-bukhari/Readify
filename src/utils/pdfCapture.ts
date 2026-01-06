@@ -1,7 +1,7 @@
 import type { Highlight } from "../types/pdfHighlight";
 
 interface CaptureOptions {
-  pageRef: React.RefObject<HTMLDivElement>;
+  pageRef: React.RefObject<HTMLDivElement | null>;
   highlights: Highlight[];
   currentPage: number;
   zoom: number;
